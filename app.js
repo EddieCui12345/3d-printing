@@ -13,8 +13,7 @@ const links = [
 // Build the shared header. aria-current identifies the active page.
 // Backticks create HTML templates; ${...} inserts a JavaScript value.
 document.querySelector('header').innerHTML = `<a class="brand" href="home.html" aria-label="Steamoji home">
-    <span class="brand-icon" aria-hidden="true">✳</span>
-    <span>steamoji<small>3D PRINT LAB</small>
+    <span>Steamoji<small>3D PRINT LAB</small>
     </span>
   </a>
   <button class="menu-toggle" aria-expanded="false" aria-controls="navigation">Menu +</button>
@@ -42,8 +41,7 @@ const locations = `<div>
 // Keep the footer consistent across pages, with the current year.
 document.querySelector('footer').innerHTML = `<div class="footer-top">
     <div>
-      <a class="brand" href="home.html">✳ steamoji</a>
-      <p style="margin-top:16px">Made with curiosity (and a few do-overs).</p>
+      <a class="brand" href="home.html">Steamoji</a>
     </div>${locations}</div>
   <div class="footer-bottom">
     <span>© ${new Date().getFullYear()} Steamoji 3D Print Studio</span>
@@ -56,18 +54,13 @@ document.querySelector('footer').innerHTML = `<div class="footer-top">
 const products = [{
   name: 'Chess with a twist',
   category: 'Play',
-  image: '2024-12-21_6e24a0ff606b38.webp',
+  image: 'assets/2024-12-21_6e24a0ff606b38.webp',
   desc: 'A cylindrical take on a familiar game. Explore the chess design and contact the studio to discuss availability and options.'
 }, {
   name: 'Colorful gonggi games',
   category: 'Play',
-  image: 'IMG_4502.png',
+  image: 'assets/IMG_4502.png',
   desc: 'A colorful gonggi set that brings playful forms into the palm of your hand. Ask the studio about this design.'
-}, {
-  name: 'Imagine the possibilities',
-  category: 'Explore',
-  image: 'assets/form-studies.png',
-  desc: 'AI-generated concept artwork exploring texture, color, and sculptural form. These imagined objects are inspiration, not products offered for sale. Bring your own idea to the studio to explore what could be made.'
 }];
 
 // Return the collection HTML. Each data-product holds an index into products.
@@ -126,7 +119,7 @@ const closing = `<section class="closing">
     </a>
   </section>`;
 const feature = `<section class="feature">
-    <img class="feature-image" src="3d printing img.webp" alt="An orange geometric form being 3D printed" loading="lazy">
+    <img class="feature-image" src="assets/3d printing img.webp" alt="An orange geometric form being 3D printed" loading="lazy">
     <div class="feature-copy">
       <div class="eyebrow">A LITTLE WONDER FOR THE WHOLE FAMILY</div>
       <h2>“Wow! How did<br>it make that?”</h2>
@@ -196,7 +189,7 @@ if (page === 'products') main.innerHTML = `<section class="page-head">
     <p class="intro">Games to discover. Shapes to wonder about. Pick a picture and take a closer look together.</p>
   </section>
   <section class="section" style="padding-top:20px">
-    <div class="filters" aria-label="Filter collection">${['All objects', 'Play', 'Explore'].map((s, i) => `<button class="filter" aria-pressed="${i === 0}" data-filter="${s}">${s}</button>`).join('')}</div>${cards()}<p class="form-note">A showcase of print possibilities. Contact the studio for availability and project details.</p>
+    <div class="filters" aria-label="Filter collection">${['All objects'].map((s, i) => `<button class="filter" aria-pressed="${i === 0}" data-filter="${s}">${s}</button>`).join('')}</div>${cards()}<p class="form-note">A showcase of print possibilities. Contact the studio for availability and project details.</p>
   </section>${closing}`;
 if (page === 'story') main.innerHTML = `<section class="page-head">
     <div class="eyebrow">BEHIND THE PRINTS</div>
