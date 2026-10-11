@@ -73,10 +73,11 @@ const products = [{
 // Return the collection HTML. Each data-product holds an index into products.
 // Both the image and its Explore button open the same product details.
 function cards() {
-  return `<div class="collection">${products.map((p, i) => `<article class="product" data-category="${p.category}">
+  return `
+    <section class="carousel" aria-label="Print gallery" aria-roledescription="carousel">
+      <div class="collection">${products.map((p, i) => `<article class="product" data-category="${p.category}" aria-roledescription="slide" aria-label="${i + 1} of ${products.length}" ${i > 0 ? 'hidden' : ''}>
     <button class="product-image" data-product="${i}" aria-label="Take a closer look at ${p.name}">
       <img src="${p.image}" alt="${['Cylindrical chess boards in cream and black', 'Colorful printed gonggi game pieces', 'Concept artwork of orange, sage, and ivory printed sculptures'][i]}" loading="lazy">
-      <span class="badge">${i === 2 ? 'IMAGINE' : 'LET’S PLAY'}</span>
     </button>
     <div class="product-info">
       <div>
@@ -85,7 +86,13 @@ function cards() {
       </div>
       <button class="round-link" data-product="${i}" aria-label="Explore ${p.name}">Explore ↗</button>
     </div>
-  </article>`).join('')}</div>`;
+  </article>`).join('')}</div>
+      <div class="carousel-controls">
+        <button class="carousel-arrow" data-direction="-1" aria-label="Previous image">←</button>
+        <p class="carousel-status" aria-live="polite" aria-atomic="true">1 / ${products.length}</p>
+        <button class="carousel-arrow" data-direction="1" aria-label="Next image">→</button>
+      </div>
+    </section>`;
 }
 
 // These HTML sections are reused by several pages.
@@ -248,12 +255,65 @@ document.querySelector('.menu-toggle').addEventListener('click', e => {
   document.querySelector('nav').classList.toggle('open', open);
 });
 
-// 5. COLLECTION FILTERS
-// Show every product for All objects, or only the selected category.
-document.querySelectorAll('[data-filter]').forEach(b => b.addEventListener('click', () => {
-  document.querySelectorAll('[data-filter]').forEach(x => x.setAttribute('aria-pressed', x === b));
-  document.querySelectorAll('.product').forEach(x => x.hidden = b.dataset.filter !== 'All objects' && x.dataset.category !== b.dataset.filter);
-}));
+// 5. IMAGE CAROUSEL AND COLLECTION FILTERS
+// Show one large picture at a time. No automatic movement: visitors set the pace.
+const carousel = document.querySelector('.carousel');
+
+if (carousel) {
+  const slides = Array.from(carousel.querySelectorAll('.product'));
+  const arrows = carousel.querySelectorAll('[data-direction]');
+  const status = carousel.querySelector('.carousel-status');
+  let matchingSlides = slides;
+  let currentSlide = 0;
+
+  // Wrap around at either end, and hide inactive slides from keyboard navigation.
+  function showSlide(index) {
+    currentSlide = (index + matchingSlides.length) % matchingSlides.length;
+    slides.forEach(slide => {
+      slide.hidden = slide !== matchingSlides[currentSlide];
+    });
+    matchingSlides[currentSlide].setAttribute(
+      'aria-label',
+      `${currentSlide + 1} of ${matchingSlides.length}`
+    );
+    status.textContent = `${currentSlide + 1} / ${matchingSlides.length}`;
+    arrows.forEach(arrow => {
+      arrow.disabled = matchingSlides.length < 2;
+    });
+  }
+
+  arrows.forEach(arrow => {
+    arrow.addEventListener('click', () => {
+      showSlide(currentSlide + Number(arrow.dataset.direction));
+    });
+  });
+
+  // Arrow keys work while focus is on an image or a control inside the gallery.
+  carousel.addEventListener('keydown', event => {
+    if (matchingSlides.length < 2) return;
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      event.preventDefault();
+      const direction = event.key === 'ArrowRight' ? 1 : -1;
+      showSlide(currentSlide + direction);
+      // Keep focus on a visible control if the focused slide has just disappeared.
+      carousel.querySelector(`[data-direction="${direction}"]`).focus();
+    }
+  });
+
+  // On the collection page, filters limit the pictures available in the carousel.
+  document.querySelectorAll('[data-filter]').forEach(button => {
+    button.addEventListener('click', () => {
+      document.querySelectorAll('[data-filter]').forEach(filter => {
+        filter.setAttribute('aria-pressed', filter === button);
+      });
+      matchingSlides = slides.filter(slide => {
+        return button.dataset.filter === 'All objects' ||
+          slide.dataset.category === button.dataset.filter;
+      });
+      showSlide(0);
+    });
+  });
+}
 
 // 6. PRODUCT DETAILS
 // Reuse one native dialog. showModal() handles focus and the Escape key.
