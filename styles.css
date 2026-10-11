@@ -655,6 +655,45 @@ dialog .close {
   top: 10px;
 }
 
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  width: 100%;
+}
+
+.product-grid .product {
+  min-width: 0;
+}
+
+.product-grid .product-image {
+  display: block;
+  width: 100%;
+}
+
+.product-grid .product-image img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.product-grid .product[hidden] {
+  display: none;
+}
+
+@media (max-width: 800px) {
+  .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 500px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* RESPONSIVE RULES: adapt the layout at different screen widths. */
 @media(min-width:1600px) {
   body {

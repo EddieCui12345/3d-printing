@@ -67,24 +67,24 @@ const products = [{
 // Both the image and its Explore button open the same product details.
 function cards() {
   return `
-    <section class="carousel" aria-label="Print gallery" aria-roledescription="carousel">
-      <div class="collection">${products.map((p, i) => `<article class="product" data-category="${p.category}" aria-roledescription="slide" aria-label="${i + 1} of ${products.length}" ${i > 0 ? 'hidden' : ''}>
-    <button class="product-image" data-product="${i}" aria-label="Take a closer look at ${p.name}">
-      <img src="${p.image}" alt="${['Cylindrical chess boards in cream and black', 'Colorful printed gonggi game pieces', 'Concept artwork of orange, sage, and ivory printed sculptures'][i]}" loading="lazy">
-    </button>
-    <div class="product-info">
-      <div>
-        <h3>${p.name}</h3>
-        <p>${i === 2 ? 'Dream shapes · AI concept art' : 'Take a closer look together'}</p>
-      </div>
-      <button class="round-link" data-product="${i}" aria-label="Explore ${p.name}">Explore ↗</button>
-    </div>
-  </article>`).join('')}</div>
-      <div class="carousel-controls">
-        <button class="carousel-arrow" data-direction="-1" aria-label="Previous image">←</button>
-        <p class="carousel-status" aria-live="polite" aria-atomic="true">1 / ${products.length}</p>
-        <button class="carousel-arrow" data-direction="1" aria-label="Next image">→</button>
-      </div>
+    <section class="product-grid" aria-label="Product gallery">
+      ${products.map((p, i) => `
+        <article class="product" data-category="${p.category}">
+          <button class="product-image" data-product="${i}"
+            aria-label="Take a closer look at ${p.name}">
+            <img src="${p.image}" alt="${p.name}" loading="lazy">
+          </button>
+          <div class="product-info">
+            <div>
+              <h3>${p.name}</h3>
+              <p>Take a closer look together</p>
+            </div>
+            <button class="round-link" data-product="${i}">
+              Explore ↗
+            </button>
+          </div>
+        </article>
+      `).join('')}
     </section>`;
 }
 
