@@ -372,7 +372,7 @@ h2 {
   display: flex;
   justify-content: space-between;
   margin-top: 18px;
-  gap: 15px;
+  gap: 15px;;
 }
 
 .product-info h3 {
@@ -617,7 +617,7 @@ dialog {
   border-radius: 5px;
 }
 
-dialog: :backdrop {
+dialog :backdrop {
   background: #20251bb3;
   backdrop-filter: blur(5px);
 }
@@ -682,6 +682,58 @@ dialog .close {
   display: none;
 }
 
+.coming-soon-image {
+  display: none;
+}
+
+.coming-soon .product-info {
+  justify-content: center;
+  padding: 0;
+}
+
+.coming-soon .product-info h3 {
+  font-size: 24px;
+}
+
+.coming-soon .product-info p {
+  font-size: 15px;
+}
+
+.story-hero {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  align-items: center;
+  gap: 40px;
+  width: 100%;
+}
+
+.story-hero-text {
+  min-width: 0;
+}
+
+.story-hero-image {
+  width: 100%;
+  height: 380px;
+  overflow: hidden;
+}
+
+.story-hero-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.5;
+}
+
+@media (max-width: 700px) {
+  .story-hero {
+    grid-template-columns: 1fr !important;
+  }
+
+  .story-hero-image {
+    height: 260px;
+  }
+}
 @media (max-width: 800px) {
   .product-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
