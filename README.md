@@ -1,27 +1,20 @@
-# Steamoji website
+# Steamoji Apprentices’ 3D Toy Design Club
 
-A local front-end concept built with HTML, CSS, and vanilla JavaScript. No framework, package installation, or build step is needed.
+A responsive static website using HTML, CSS, and vanilla JavaScript. No build or package installation is required.
 
-## Open the site
+## Preview
 
-Open `index.html` in your browser, or run `python -m http.server 4173 --bind 127.0.0.1` from this folder and visit `http://127.0.0.1:4173`.
+Run `python -m http.server 4173 --bind 127.0.0.1` in this folder and open http://127.0.0.1:4173.
 
-## Files
+## Content and maintenance
 
-- `index.html` and `home.html`: homepage entry points.
-- `products.html`, `story.html`, `about.html`, `contact.html`: other page entry points.
-- `styles.css`: shared styling and mobile layouts.
-- `app.js`: page content, navigation, collection filters, details dialogs, email draft, and canvas sculpture.
-- `assets/form-studies.png`: original AI-generated conceptual artwork. It is explicitly labeled as a concept in the collection.
+- `app.js` contains shared navigation, page content, product records, and memory records.
+- Add products to `products` with a name, category, image path, and description. Update the filter choices if introducing new categories.
+- Add approved community entries to `memories` with `year`, `type`, `title`, `description`, and `url`. The year filter updates automatically. The supplied album is undated because its event dates were not verified.
+- Store new approved images in `assets/`. Use factual captions and accessible image descriptions. Keep original media backups.
+- Dedicated pages cover creations, memories, designers, process, impact, events, about, joining, and contact. `index.html` and `home.html` both show the homepage.
+- Prices, availability, fundraising figures, dates, apprentice profiles, and edited videos await confirmed content. The existing project’s product photos are used; the supplied Google Photos collection is linked rather than imported.
 
-The other photographs came from the original project. Google Fonts is optional; system fonts are used if it is unavailable.
+The contact form prepares a draft in the visitor’s email application. It does not send or store submissions. There is no checkout, inventory, CMS, or automatic album synchronization. Future years and entries are added by editing the data in `app.js`.
 
-## Front-end behavior
-
-The contact form prepares a draft in the visitor's email app. It does not send messages or store submissions. The site has no checkout, backend, or inventory system.
-
-The business contact details are retained from the original homepage. Final maker biography and positioning still need the project owner's wording.
-
-## Verification
-
-JavaScript syntax and local HTTP response checked. Browser checks covered desktop and narrow mobile layouts, collection filtering, opening a details dialog, mobile menu expansion, and sculpture color selection.
+Google Fonts is optional; fallback fonts work offline. Reduced-motion preferences are respected. No deployment is configured in this repository.
