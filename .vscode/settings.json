@@ -1,0 +1,21 @@
+{
+  "editor.lineNumbers": "on",
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.wordWrap": "on",
+  "editor.folding": true,
+  "editor.guides.indentation": true,
+  "editor.bracketPairColorization.enabled": true,
+  "editor.stickyScroll.enabled": true,
+  "editor.minimap.enabled": false,
+  "files.associations": {
+    "*.js": "javascript",
+    "*.html": "html",
+    "*.css": "css"
+  },
+  "javascript.validate.enable": true,
+  "css.validate": true,
+  "html.validate.scripts": true,
+  "html.validate.styles": true
+}
