@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const products = require('../products.js');
+const { items: catalogue } = require('../products.js');
 
 const MAX_QTY = 20;
 const SQUARE_HOSTS = {
@@ -22,13 +22,13 @@ module.exports = async (req, res) => {
   }
 
   const items = Array.isArray(req.body?.items) ? req.body.items : [];
-  if (!items.length || items.length > products.length) {
+  if (!items.length || items.length > catalogue.length) {
     return res.status(400).json({ error: 'Your cart is empty or invalid.' });
   }
 
   const lineItems = [];
   for (const { id, qty } of items) {
-    const product = products.find((p) => p.id === id);
+    const product = catalogue.find((p) => p.id === id);
     const quantity = Number(qty);
     if (
       !product ||

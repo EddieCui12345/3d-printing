@@ -103,17 +103,29 @@ const intro = (eyebrow, title, text) => `
     <p class="lead">${text}</p>
   </section>`;
 
+const coverImage = (p) => (p.colours ? p.colours[0].image : p.image);
+
+function cardSwatches(p, index) {
+  if (!p.colours) return '';
+  const dots = p.colours.map(
+    (c) =>
+      `<button class="swatch small" style="--swatch:${c.swatch}" data-product="${index}" data-colour="${c.id}" aria-label="${p.name} in ${c.name}" title="${c.name}"></button>`,
+  );
+  return `<div class="card-swatches">${dots.join('')}<span>${p.colours.length} colours</span></div>`;
+}
+
 function productCard(p) {
   const index = products.indexOf(p);
   return `
     <article class="product-card">
       <button class="product-photo" data-product="${index}" aria-label="Explore ${p.name}">
-        <img src="${p.image}" alt="${p.name}" loading="lazy">
+        <img src="${coverImage(p)}" alt="${p.name}" loading="lazy">
         <span class="round-arrow">↗</span>
       </button>
       <div class="card-meta">${p.category} <span>Club collection</span></div>
       <h3><button class="text-button" data-product="${index}">${p.name}</button></h3>
       <p>${p.desc}</p>
+      ${cardSwatches(p, index)}
       <small>${priceLabel(p)}</small>
     </article>`;
 }
@@ -534,7 +546,7 @@ cartDialog.setAttribute('aria-labelledby', 'cart-title');
 document.body.append(cartDialog);
 
 const cartKey = 'steamoji-cart';
-const sellable = (id) => products.find((p) => p.id === id && p.price != null);
+const sellable = (id) => items.find((p) => p.id === id && p.price != null);
 
 let cart = {};
 try {
@@ -595,21 +607,37 @@ function renderCart() {
     </div>`;
 }
 
-function productDetail(p) {
+function colourPicker(p, colour) {
+  if (!p.colours) return '';
+  const swatches = p.colours.map(
+    (c) =>
+      `<button class="swatch" style="--swatch:${c.swatch}" data-colour="${c.id}" aria-pressed="${c === colour}" aria-label="${c.name}" title="${c.name}"></button>`,
+  );
+  return `
+    <div class="colour-picker">
+      <p>Colour: <strong class="colour-name">${colour.name}</strong></p>
+      <div class="swatches" role="group" aria-label="Choose a colour">${swatches.join('')}</div>
+    </div>`;
+}
+
+function productDetail(p, colourId) {
+  const colour = p.colours && (p.colours.find((c) => c.id === colourId) || p.colours[0]);
+  const item = colour ? items.find((i) => i.id === colour.id) : p;
   const priced = p.price != null;
   const price = priced
     ? `<strong class="dialog-price">${money(p.price)}</strong> · Pay securely with Square.`
     : 'Price and availability will be announced when sales open.';
   const addButton = priced
-    ? `<button class="button" data-add="${p.id}">Add to cart ${arrow}</button>`
+    ? `<button class="button" data-add="${item.id}">Add to cart ${arrow}</button>`
     : '<button class="button" disabled>Add to cart · coming soon</button>';
   return `
     <button class="close-dialog" aria-label="Close product details">×</button>
-    <img src="${p.image}" alt="${p.name}">
+    <img src="${item.image}" alt="${item.name}">
     <div class="dialog-copy">
       <p class="eyebrow">${p.category} / CLUB COLLECTION</p>
       <h2 id="detail-title">${p.name}</h2>
       <p>${p.desc}</p>
+      ${colourPicker(p, colour)}
       <p>${price}</p>
       <div class="actions">
         ${addButton}
@@ -649,12 +677,25 @@ document.querySelector('.cart-toggle').addEventListener('click', () => {
 document.addEventListener('click', (e) => {
   const trigger = e.target.closest('[data-product]');
   if (!trigger) return;
-  dialog.innerHTML = productDetail(products[Number(trigger.dataset.product)]);
+  dialog.innerHTML = productDetail(products[Number(trigger.dataset.product)], trigger.dataset.colour);
   dialog.querySelector('.close-dialog').onclick = () => dialog.close();
   dialog.showModal();
 });
 
 dialog.addEventListener('click', (e) => {
+  const swatch = e.target.closest('[data-colour]');
+  if (swatch) {
+    const item = items.find((i) => i.id === swatch.dataset.colour);
+    const img = dialog.querySelector(':scope > img');
+    img.src = item.image;
+    img.alt = item.name;
+    dialog.querySelector('.colour-name').textContent = swatch.title;
+    dialog.querySelector('[data-add]')?.setAttribute('data-add', item.id);
+    dialog
+      .querySelectorAll('[data-colour]')
+      .forEach((s) => s.setAttribute('aria-pressed', String(s === swatch)));
+    return;
+  }
   const add = e.target.closest('[data-add]');
   if (!add) return;
   setQty(add.dataset.add, (cart[add.dataset.add] || 0) + 1);

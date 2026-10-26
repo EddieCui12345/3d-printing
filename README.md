@@ -11,7 +11,7 @@ Run `python -m http.server 4173 --bind 127.0.0.1` in this folder and open http:/
 See [CODE_INDEX.md](CODE_INDEX.md) for a file and function index, editor navigation shortcuts, and debugging instructions. Run `npm run check` to check application JavaScript syntax without installing packages.
 
 - `app.js` contains shared navigation, page content, the cart, and memory records. `products.js` holds the product list and prices.
-- Add products to `products.js` with a unique `id`, name, category, `price` in cents (CAD), image path, and description. A `null` price shows "coming soon" and disables "Add to cart". Update the filter choices if introducing new categories.
+- Add products to `products.js` with a unique `id`, name, category, `price` in cents (CAD), image path, and description. A `null` price shows "coming soon" and disables "Add to cart". To sell one product in several colours, give it a `colours` list (each with its own `id`, `name`, `swatch` hex colour, and `image`) instead of a single `image`. Update the filter choices if introducing new categories.
 
 ## Cart and Square checkout
 
