@@ -152,8 +152,10 @@ header {
   flex-direction: column;
   align-items: flex-start;
 }
+/* Matches the blue in the logo badge. */
+.brand-name,
 .brand-name span {
-  color: var(--blue-bright);
+  color: #0a3399;
 }
 .brand-tag {
   margin-top: 5px;
@@ -323,8 +325,9 @@ nav a[aria-current]:after {
 .mini-polaroid {
   position: absolute;
   width: 48%;
-  left: 0;
-  bottom: 0;
+  /* Inset so the tilted corners stay inside .hero-art, which clips its overflow. */
+  left: 26px;
+  bottom: 38px;
   transform: rotate(-12deg);
   background: #fff;
   padding: 9px 9px 13px;
