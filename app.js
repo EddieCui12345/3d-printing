@@ -374,7 +374,7 @@ const pages = {
     <section class="about-section">
       <div class="wrap about-layout">
         <div class="workshop-photo">
-          <img src="assets/memory-2025-printer.jpg" alt="A 3D printer ready for the next print at Steamoji Richmond Central" loading="lazy">
+          <img src="assets/workshop-printers.jpg" style="object-position:center 68%" alt="Two 3D printers in the Steamoji Richmond maker room, beside a colourful pegboard wall of printed shelves" loading="lazy">
           <span class="photo-label">IDEAS BECOME REAL HERE.</span>
         </div>
         <div>
@@ -439,7 +439,7 @@ const pages = {
       'Hands-on learning for young makers, builders, innovators, and entrepreneurs.',
     )}
     <section class="wrap split bottom-space">
-      <img class="rounded-image" src="assets/memory-2025-printer.jpg" alt="A 3D printer in the Steamoji Richmond Central workshop">
+      <img class="rounded-image" src="assets/workshop-printers.jpg" style="object-position:center 68%" alt="Two 3D printers in the Steamoji Richmond maker room, beside a colourful pegboard wall of printed shelves">
       <div>
         <h2>Learning by making.</h2>
         <p>Steamoji’s project-based STEM learning gives apprentices space to explore ideas, try different solutions, and build confidence through making.</p>
