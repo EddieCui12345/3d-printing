@@ -1,17 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;650;700;800&display=swap');
 /* ---------- Theme and base styles ---------- */
-/* Steamoji brand palette: sunny yellow with navy and indigo blues. */
+/* Steamoji brand palette, matched to the logo badge: blue #0c3199 and yellow #fdd118. */
 :root {
   --paper: #f7f6f2;
-  --ink: #1a1d59;
-  --blue: #2f3386;
-  --blue-bright: #4a50b0;
-  --navy: #1a1d59;
-  --yellow: #f9ce47;
-  --lavender: #d0cee8;
-  --mist: #eceaf3;
-  --line: #dcdbe8;
-  --muted: #565a7e;
+  --ink: #0a2266;
+  --blue: #0a2a85;
+  --blue-bright: #0c3199;
+  --navy: #0a2266;
+  --yellow: #fdd118;
+  --lavender: #cdd6f0;
+  --mist: #e9edf7;
+  --line: #d6dcec;
+  --muted: #4f5b80;
 }
 * {
   box-sizing: border-box;
@@ -95,7 +95,7 @@ img {
 }
 .accent {
   color: var(--blue-bright);
-  background: linear-gradient(transparent 64%, #f9ce4799 64%);
+  background: linear-gradient(transparent 64%, #fdd11899 64%);
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
@@ -155,7 +155,7 @@ header {
 /* Matches the blue in the logo badge. */
 .brand-name,
 .brand-name span {
-  color: #0a3399;
+  color: var(--blue-bright);
 }
 .brand-tag {
   margin-top: 5px;
@@ -292,12 +292,12 @@ nav a[aria-current]:after {
 .hero-art {
   position: relative;
   height: 520px;
-  background: radial-gradient(ellipse, #e4e2f2 0%, #e4e2f280 47%, transparent 69%);
+  background: radial-gradient(ellipse, #e3e8f5 0%, #e3e8f580 47%, transparent 69%);
 }
 .orbit {
   position: absolute;
   inset: 40px 0 15px;
-  border: 1px dashed #a3a6d4;
+  border: 1px dashed #9fb0dc;
   border-radius: 50%;
   transform: rotate(-25deg);
 }
@@ -309,7 +309,7 @@ nav a[aria-current]:after {
   background: #fff;
   padding: 13px 13px 20px;
   transform: rotate(7deg);
-  box-shadow: 0 12px 30px #1a1d591c;
+  box-shadow: 0 12px 30px #0a22661c;
   border: 1px solid var(--line);
 }
 .main-polaroid img {
@@ -331,7 +331,7 @@ nav a[aria-current]:after {
   transform: rotate(-12deg);
   background: #fff;
   padding: 9px 9px 13px;
-  box-shadow: 0 9px 25px #1a1d5926;
+  box-shadow: 0 9px 25px #0a226626;
 }
 .mini-polaroid img {
   height: 150px;
@@ -398,7 +398,7 @@ nav a[aria-current]:after {
   white-space: nowrap;
   padding: 19px 0;
   background: var(--yellow);
-  border-block: 1px solid #e8b92f;
+  border-block: 1px solid #e5b800;
   color: var(--navy);
   font-size: 25px;
 }
@@ -469,7 +469,7 @@ nav a[aria-current]:after {
   font-weight: 700;
   letter-spacing: 0.01em;
   border-radius: 4px;
-  box-shadow: 0 3px 8px rgb(26 29 89 / 22%);
+  box-shadow: 0 3px 8px rgb(10 34 102 / 22%);
   transform: rotate(-4deg);
   background-image: repeating-linear-gradient(
     90deg,
@@ -567,7 +567,7 @@ nav a[aria-current]:after {
   transform: rotate(-3deg);
   padding: 12px;
   background: white;
-  box-shadow: 0 6px 20px #1a1d5910;
+  box-shadow: 0 6px 20px #0a226610;
 }
 .workshop-photo img {
   height: auto;
@@ -606,7 +606,7 @@ nav a[aria-current]:after {
   padding: 8px 8px 26px;
   background: #fff;
   border-radius: 6px;
-  box-shadow: 0 10px 24px rgb(26 29 89 / 18%);
+  box-shadow: 0 10px 24px rgb(10 34 102 / 18%);
   transform: rotate(-4deg);
 }
 .memory-snap img {
@@ -736,7 +736,7 @@ nav a[aria-current]:after {
   font-weight: 700;
   font-size: 16px;
   text-decoration: none;
-  box-shadow: 0 6px 16px rgb(26 29 89 / 8%);
+  box-shadow: 0 6px 16px rgb(10 34 102 / 8%);
   transition:
     transform 0.2s,
     border-color 0.2s;
@@ -1231,7 +1231,7 @@ dialog > img {
   padding: 14px 14px 0;
   background: #fff;
   border-radius: 6px;
-  box-shadow: 0 14px 36px #1a1d591f;
+  box-shadow: 0 14px 36px #0a22661f;
   transform: rotate(var(--tilt, -1.2deg));
   transition: transform 0.5s;
 }
@@ -1256,7 +1256,7 @@ dialog > img {
   background: var(--yellow);
   color: var(--navy);
   font-size: 22px;
-  box-shadow: 0 4px 12px #1a1d5933;
+  box-shadow: 0 4px 12px #0a226633;
 }
 .gallery-nav.prev {
   left: -12px;
