@@ -2,6 +2,7 @@
   "name": "steamoji-toy-design-club",
   "private": true,
   "scripts": {
+    "dev": "node dev-server.js",
     "check": "node --check app.js && node --check products.js && node --check api/checkout.js"
   }
 }

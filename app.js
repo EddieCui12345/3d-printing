@@ -14,11 +14,6 @@ const nav = [
 
 const celebrationPhotos = [
   {
-    src: 'assets/memory-2025-group.jpg',
-    alt: 'Apprentices and mentors gather with a fundraising cheque at Steamoji Richmond Central',
-    caption: 'The club, together.',
-  },
-  {
     src: 'assets/memory-2025-cheque.jpg',
     alt: 'Mentors hold a fundraising cheque supporting BC Children’s Hospital',
     caption: 'A gift with a purpose.',
@@ -64,7 +59,7 @@ const celebrationPhotos = [
     caption: 'The making table.',
   },
 ];
-const storeMoments = celebrationPhotos.slice(4, 7);
+const storeMoments = celebrationPhotos.slice(3, 6);
 
 // Add approved memories here as they become available. Keep dates and captions factual.
 const memories = [
@@ -74,10 +69,61 @@ const memories = [
     title: '3D Toy Club Celebration',
     description:
       'On December 18, 2025, Richmond Central apprentices marked the year with certificates, shared cylindrical chess creations, and a fundraising moment for BC Children’s Hospital.',
-    url: album,
-    cover: 'assets/memory-2025-group.jpg',
+    url: '#gallery',
+    cover: 'assets/memory-2025-club.jpg',
     photos: celebrationPhotos,
   },
+];
+
+// Photos for the rotating gallery on the Stories & memories page, stored in assets/gallery/.
+const galleryPhotos = [
+  ['IMG_7347.jpg', 'An apprentice smiles beside a laptop in the classroom'],
+  ['IMG_7354.jpg', 'Apprentices working on laptops at their desks'],
+  ['IMG_7355.jpg', 'Two apprentices work together at a laptop'],
+  ['IMG_2653.jpg', 'An apprentice works on a design at a laptop'],
+  ['IMG_2654.jpg', 'An apprentice at a classroom desk with a laptop'],
+  ['IMG_2664.jpg', 'The Steamoji Richmond classroom during a session'],
+  ['IMG_2667.jpg', 'Apprentices at work across the classroom'],
+  ['IMG_2670.jpg', 'A 3D design open on a laptop screen'],
+  ['IMG_2684.jpg', 'Apprentices working at their stations'],
+  ['IMG_2690.jpg', 'An apprentice and a mentor at a computer'],
+  ['IMG_2692.jpg', 'Two apprentices look at a laptop together'],
+  ['IMG_2694.jpg', 'Apprentices and a mentor in the classroom'],
+  ['IMG_2695.jpg', 'A mentor helps an apprentice at a laptop'],
+  ['IMG_2696.jpg', 'A design project open on a laptop'],
+  ['IMG_2831.jpg', 'An apprentice works at a laptop by the window'],
+  ['IMG_2834_1.jpg', 'An apprentice builds a design on a laptop'],
+  [
+    'IMG_4152.jpg',
+    'Apprentices and mentors hold a large cheque in front of a Small is Mighty banner',
+  ],
+  ['IMG_4154.jpg', 'An apprentice and a mentor beside a Small is Mighty banner'],
+  ['IMG_4162.jpg', 'An apprentice holds a large cheque and a 3D-printed creation'],
+  ['IMG_4166.jpg', 'An apprentice shows a cheque and a 3D-printed creation'],
+  ['IMG_4739.jpg', 'The classroom set up for a session'],
+  ['IMG_4745.jpg', 'An apprentice works at a laptop'],
+  ['IMG_4748.jpg', 'An apprentice works on a laptop beside handwritten notes'],
+  ['IMG_5214.jpg', 'An apprentice works on a laptop beside classmates'],
+  ['IMG_5216.jpg', 'Apprentices working at their computers'],
+  ['P2800165.jpg', 'An apprentice receives a certificate from mentors'],
+  ['P2800170.jpg', 'An apprentice proudly holds a certificate with mentors'],
+  ['P2800173.jpg', 'An apprentice in a pink jacket holds a certificate'],
+  ['P2800179.jpg', 'An apprentice holds a certificate beside mentors'],
+  ['P2800184.jpg', 'An apprentice in a WOOF! sweater holds a certificate'],
+  ['P2800190.jpg', 'An apprentice in blue holds a certificate'],
+  ['P2800195.jpg', 'An apprentice celebrates with a certificate and mentors'],
+  ['P2800199.jpg', 'Mentors and staff at the December 2025 celebration'],
+  ['P2800201.jpg', 'Mentors and staff together at the celebration'],
+  ['P2800205.jpg', 'Mentors hold the fundraising cheque for BC Children’s Hospital'],
+  ['P2800222.jpg', 'An apprentice holds a certificate with mentors'],
+  ['P2800237.jpg', 'Apprentices and mentors gather with the fundraising cheque'],
+  ['P2800250.jpg', 'The whole club cheers with the fundraising cheque'],
+  ['P2800256.jpg', 'Apprentices share a laptop at the celebration'],
+  ['P2800275.jpg', 'An apprentice holds a cylindrical chess set'],
+  ['P2800278.jpg', 'An apprentice and family with a cylindrical chess set'],
+  ['P2800288.jpg', 'Two apprentices and a parent with their chess sets'],
+  ['P2800293.jpg', 'An apprentice and family hold colourful chess sets'],
+  ['P2800317.jpg', 'A family in front of the Steamoji wall'],
 ];
 
 const processSteps = [
@@ -96,14 +142,21 @@ const money = (cents) =>
   new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD' }).format(cents / 100);
 const priceLabel = (p) => (p.price == null ? 'Prices & availability coming soon' : money(p.price));
 
-const intro = (eyebrow, title, text) => `
+const intro = (eyebrow, title, text, extra = '') => `
   <section class="page-intro wrap">
     <p class="eyebrow">${eyebrow}</p>
     <h1>${title}</h1>
     <p class="lead">${text}</p>
+    ${extra}
   </section>`;
 
-const coverImage = (p) => (p.colours ? p.colours[0].image : p.image);
+const charityBadge = `
+  <a class="charity-badge" href="https://www.bcchf.ca/" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.1 5.3 3 1.7-1.9 3.2-3 5.3-3 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>
+    <span><small>Proudly supporting</small>BC Children’s Hospital Foundation</span>
+  </a>`;
+
+const focusStyle = (p) => (p.focus ? ` style="object-position:${p.focus}"` : '');
 
 function cardSwatches(p, index) {
   if (!p.colours) return '';
@@ -119,7 +172,8 @@ function productCard(p) {
   return `
     <article class="product-card">
       <button class="product-photo" data-product="${index}" aria-label="Explore ${p.name}">
-        <img src="${coverImage(p)}" alt="${p.name}" loading="lazy">
+        <img src="${p.image}" alt="${p.name}" loading="lazy"${focusStyle(p)}>
+        <span class="maker-badge">Kid-made · tiny quirks included</span>
         <span class="round-arrow">↗</span>
       </button>
       <div class="card-meta">${p.category} <span>Club collection</span></div>
@@ -131,6 +185,9 @@ function productCard(p) {
 }
 
 function cards(items = products) {
+  if (!items.length) {
+    return '<p class="empty-note">New creations are on the way. Check back soon.</p>';
+  }
   return `<div class="product-grid">${items.map((p) => productCard(p)).join('')}</div>`;
 }
 
@@ -159,10 +216,6 @@ function memoryEntry(m) {
     ${m.photos ? photoGrid(m.photos) : ''}`;
 }
 
-const filterButtons = ['All', 'Games', 'Chess']
-  .map((c, i) => `<button data-filter="${c}" aria-pressed="${i === 0}">${c}</button>`)
-  .join('');
-
 const yearOptions = [...new Set(memories.map((m) => m.year))]
   .map((y) => `<option value="${y}">${y}</option>`)
   .join('');
@@ -178,6 +231,29 @@ const stepCards = processSteps
   )
   .join('');
 
+const gallery = `
+  <section class="gallery" id="gallery" aria-roledescription="carousel" aria-label="Photo gallery">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">INSIDE THE ACADEMY</p>
+        <h2>Our photo gallery.</h2>
+      </div>
+      <div>
+        <p>Classes, projects, and celebrations at Steamoji Richmond. Photos change every few seconds; hover or press pause to stop.</p>
+      </div>
+    </div>
+    <div class="gallery-stage">
+      <img class="gallery-image" src="assets/gallery/${galleryPhotos[0][0]}" alt="${galleryPhotos[0][1]}">
+      <button class="gallery-nav prev" aria-label="Previous photo">←</button>
+      <button class="gallery-nav next" aria-label="Next photo">→</button>
+      <div class="gallery-bar">
+        <p class="gallery-caption" aria-live="off">${galleryPhotos[0][1]}</p>
+        <span class="gallery-count">1 / ${galleryPhotos.length}</span>
+        <button class="gallery-pause" aria-pressed="false">Pause</button>
+      </div>
+    </div>
+  </section>`;
+
 const cta = `
   <section class="join-banner wrap">
     <div>
@@ -188,7 +264,14 @@ const cta = `
       <p>Big ideas start with a little curiosity.<br>Let’s make something together.</p>
       ${button('join.html', 'Explore the club')}
     </div>
-    <span class="banner-star" aria-hidden="true">✳</span>
+    <svg class="banner-mark" viewBox="0 0 64 64" aria-hidden="true">
+      <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+        <rect x="6" y="6" width="52" height="52" rx="18"/>
+        <circle cx="22" cy="26" r="3.5" fill="currentColor" stroke="none"/>
+        <path d="M36 26q4.5-5 9 0"/>
+        <path d="M19 37q13 13 26 0"/>
+      </g>
+    </svg>
   </section>`;
 
 /* ---------- Header and footer ---------- */
@@ -200,20 +283,28 @@ const navLinks = nav
   )
   .join('');
 
+const brand = `
+  <a class="brand" href="index.html" aria-label="Steamoji Richmond Academy home">
+    <img class="brand-logo" src="assets/logo-mark.svg" alt="">
+    <span class="brand-text" aria-hidden="true">
+      <span class="brand-name">steam<span>oji</span></span>
+      <span class="brand-tag">RICHMOND ACADEMY</span>
+    </span>
+  </a>`;
+
 document.querySelector('header').innerHTML = `
-  <a class="brand" href="index.html" aria-label="Steamoji Toy Club home">
-    <span class="brand-mark" aria-hidden="true">s<span>•</span></span>
-    <span>steamoji<small>THE 3D TOY DESIGN CLUB</small></span>
-  </a>
+  ${brand}
   <button class="menu-toggle" aria-expanded="false" aria-controls="navigation">Menu ☰</button>
   <nav id="navigation" aria-label="Main navigation">${navLinks}</nav>
-  <button class="cart-toggle" aria-haspopup="dialog">Cart <span class="cart-count">0</span></button>
-  <a class="header-join" href="join.html">Join the club ${arrow}</a>`;
+  <div class="header-actions">
+    <button class="cart-toggle" aria-haspopup="dialog">Cart <span class="cart-count">0</span></button>
+    <a class="header-join" href="join.html">Join the club ${arrow}</a>
+  </div>`;
 
 document.querySelector('footer').innerHTML = `
   <div class="footer-main wrap">
     <div>
-      <a class="brand" href="index.html">steamoji<span class="orange">✳</span></a>
+      ${brand}
       <p>Small makers. Big possibilities.<br>Made with imagination in Richmond, BC.</p>
     </div>
     <div>
@@ -242,7 +333,7 @@ const pages = {
     <section class="hero wrap">
       <div class="hero-copy">
         <p class="eyebrow"><span class="live-dot"></span> LITTLE MAKERS. BIG IMAGINATIONS.</p>
-        <h1>Big ideas.<br>Little hands.<br><span class="orange">Real magic.</span><span class="drawn-star" aria-hidden="true">✳</span></h1>
+        <h1>Big ideas.<br>Little hands.<br><span class="accent">Real magic.</span><span class="drawn-star" aria-hidden="true">✳</span></h1>
         <p class="lead">Welcome to the Apprentices’ 3D Toy Design Club. A place where kids turn “what if?” into toys you can hold — and kindness you can share.</p>
         <div class="actions">
           ${button('products.html', 'Explore our creations')}
@@ -254,11 +345,11 @@ const pages = {
         <div class="orbit" aria-hidden="true"></div>
         <span class="sticker sticker-top">100% imagination</span>
         <figure class="main-polaroid">
-          <img src="assets/IMG_4502.png" alt="Colourful 3D-printed gonggi game pieces in a handmade set">
+          <img src="assets/gallery/P2800293.jpg" alt="An apprentice and family hold the blue and pink cylindrical chess sets the club designed">
           <figcaption>From a bright idea → to playtime.</figcaption>
         </figure>
         <figure class="mini-polaroid">
-          <img src="assets/2024-12-21_6e24a0ff606b38.webp" alt="Creative cylindrical chess boards">
+          <img src="assets/memory-2025-shared-chess.jpg" alt="Two apprentices hold their orange and black cylindrical chess sets">
           <figcaption>A new spin on chess ↗</figcaption>
         </figure>
         <span class="sticker sticker-bottom">Dream it.<br>Make it.</span>
@@ -296,7 +387,9 @@ const pages = {
       </div>
     </section>
     <section class="memory-teaser wrap">
-      <span class="memory-symbol" aria-hidden="true">✷</span>
+      <figure class="memory-snap">
+        <img src="assets/gallery/P2800237.jpg" alt="Apprentices and teachers celebrating together on December 18, 2025" loading="lazy">
+      </figure>
       <div>
         <p class="eyebrow">MORE THAN THE THINGS WE MAKE</p>
         <h2>The memories we make together.</h2>
@@ -309,11 +402,16 @@ const pages = {
   products: `
     ${intro(
       'THE APPRENTICE COLLECTION',
-      'Made to play.<br><span class="orange">Made with purpose.</span>',
+      'Made to play.<br><span class="accent">Made with purpose.</span>',
       'Explore creations from the club’s collection. Every project is a chance to practise design, solve a problem, and share something playful.',
     )}
     <section class="wrap bottom-space">
-      <div class="filter-bar" aria-label="Filter creations">${filterButtons}</div>
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">SHOP THE COLLECTION</p>
+          <h2>Toys made by our apprentices.</h2>
+        </div>
+      </div>
       <div id="collection">${cards()}</div>
       <div class="section-heading">
         <div>
@@ -337,7 +435,7 @@ const pages = {
   about: `
     ${intro(
       'HELLO, WE’RE STEAMOJI',
-      'Curiosity is<br><span class="orange">just the beginning.</span>',
+      'Curiosity is<br><span class="accent">just the beginning.</span>',
       'Hands-on learning for young makers, builders, innovators, and entrepreneurs.',
     )}
     <section class="wrap split bottom-space">
@@ -346,7 +444,7 @@ const pages = {
         <h2>Learning by making.</h2>
         <p>Steamoji’s project-based STEM learning gives apprentices space to explore ideas, try different solutions, and build confidence through making.</p>
         <p>The Apprentices’ 3D Toy Design Club connects that learning with real creations and a community fundraising initiative.</p>
-        ${button('https://www.steamoji.com/', 'Visit the official Steamoji website', true)}
+        ${button('https://www.steamoji.com/canada-bc-richmond-central', 'Visit Steamoji Richmond Central', true)}
         <h3>Find your Richmond community</h3>
         <p>Connect with Richmond Central or Richmond North to ask about programs, schedules, and joining the club.</p>
         <a class="text-link" href="contact.html">Contact a Richmond location ↗</a>
@@ -357,7 +455,7 @@ const pages = {
   story: `
     ${intro(
       'OUR COMMUNITY SCRAPBOOK',
-      'Little moments.<br><span class="orange">A story that keeps growing.</span>',
+      'Little moments.<br><span class="accent">A story that keeps growing.</span>',
       'A home for apprentice creations, fundraising events, celebrations, and the memories we make together.',
     )}
     <section class="wrap bottom-space">
@@ -369,6 +467,7 @@ const pages = {
         </select>
       </div>
       <div id="memories"></div>
+      ${gallery}
       <div class="link-grid">
         <a href="designers.html">
           <span>01 / THE PEOPLE</span>
@@ -392,7 +491,7 @@ const pages = {
   process: `
     ${intro(
       'BEHIND THE DESIGN',
-      'From “what if?”<br><span class="orange">to “look what I made!”</span>',
+      'From “what if?”<br><span class="accent">to “look what I made!”</span>',
       'A simple guide to how a toy idea can become something real.',
     )}
     <section class="wrap bottom-space">
@@ -404,7 +503,7 @@ const pages = {
   designers: `
     ${intro(
       'MEET THE DESIGNERS',
-      'Every maker has<br><span class="orange">a story to tell.</span>',
+      'Every maker has<br><span class="accent">a story to tell.</span>',
       'Behind every creation is a curious apprentice with an idea worth exploring.',
     )}
     <section class="wrap bottom-space">
@@ -419,8 +518,9 @@ const pages = {
   impact: `
     ${intro(
       'FUNDRAISING & IMPACT',
-      'Create something playful.<br><span class="orange">Do something meaningful.</span>',
+      'Create something playful.<br><span class="accent">Do something meaningful.</span>',
       'The club’s fundraising initiative supports BC Children’s Hospital, bringing young makers and our community together.',
+      charityBadge,
     )}
     <section class="wrap split bottom-space">
       <div>
@@ -439,7 +539,7 @@ const pages = {
   events: `
     ${intro(
       'NEWS & EVENTS',
-      'Good things<br><span class="orange">happen together.</span>',
+      'Good things<br><span class="accent">happen together.</span>',
       'Fundraisers, celebrations, and moments worth remembering.',
     )}
     <section class="wrap bottom-space">
@@ -453,7 +553,7 @@ const pages = {
         <a href="story.html" class="text-link">Explore our memories ↗</a>
       </div>
       <article class="album-card">
-        <figure class="album-art"><img src="assets/memory-2025-group.jpg" alt="The December 2025 3D Toy Club Celebration at Richmond Central"></figure>
+        <figure class="album-art"><img src="assets/memory-2025-club.jpg" alt="The December 2025 3D Toy Club Celebration at Richmond Central"></figure>
         <div>
           <p class="eyebrow">18 DECEMBER 2025</p>
           <h2>3D Toy Club Celebration</h2>
@@ -466,7 +566,7 @@ const pages = {
   thanks: `
     ${intro(
       'THANK YOU',
-      'Your order is in.<br><span class="orange">Thanks for playing a part.</span>',
+      'Your order is in.<br><span class="accent">Thanks for playing a part.</span>',
       'Square will email your receipt. Your purchase supports the club’s fundraising for BC Children’s Hospital.',
     )}
     <section class="wrap bottom-space">
@@ -489,7 +589,7 @@ function contactPage() {
     ${intro(
       join ? 'COME MAKE WITH US' : 'LET’S TALK',
       join
-        ? 'Your next big idea<br><span class="orange">starts here.</span>'
+        ? 'Your next big idea<br><span class="accent">starts here.</span>'
         : 'Hello, curious minds.',
       'Parents and families: ask about club participation, programs, creations, or upcoming fundraising events.',
     )}
@@ -497,10 +597,18 @@ function contactPage() {
       <div>
         <h2>Find your people.</h2>
         <p>Choose a Richmond location and tell us what you’d like to know. The team can help with ages, schedules, and availability.</p>
-        <h3>Richmond Central</h3>
-        <a href="mailto:richmondcentral@steamoji.com">richmondcentral@steamoji.com</a>
-        <h3>Richmond North</h3>
-        <a href="mailto:richmondnorth@steamoji.com">richmondnorth@steamoji.com</a>
+        <address class="location-card">
+          <h3>Richmond Central</h3>
+          <a href="https://www.google.com/maps/search/?api=1&query=140-8031+Williams+Road+Richmond+BC+V7A+1G4" target="_blank" rel="noopener">140-8031 Williams Road<br>Richmond, BC V7A 1G4</a>
+          <a href="tel:+16044478999">(604) 447-8999</a>
+          <a href="mailto:richmondcentral@steamoji.com">richmondcentral@steamoji.com</a>
+        </address>
+        <address class="location-card">
+          <h3>Richmond North</h3>
+          <a href="https://www.google.com/maps/search/?api=1&query=116-4940+No.+3+Road+Richmond+BC+V6X+3A5" target="_blank" rel="noopener">116-4940 No. 3 Road<br>Richmond, BC V6X 3A5</a>
+          <a href="tel:+16042732555">(604) 273-2555</a>
+          <a href="mailto:richmondnorth@steamoji.com">richmondnorth@steamoji.com</a>
+        </address>
       </div>
       <form class="contact-form">
         <label>Your name<input name="name" required autocomplete="name"></label>
@@ -572,7 +680,7 @@ function setQty(id, qty) {
 function cartLine({ p, qty }) {
   return `
     <div class="cart-line">
-      <img src="${p.image}" alt="">
+      <img src="${p.thumb || p.image}" alt=""${p.thumb ? '' : focusStyle(p)}>
       <div>
         <h3>${p.name}</h3>
         <p>${money(p.price)} each</p>
@@ -630,14 +738,18 @@ function productDetail(p, colourId) {
   const addButton = priced
     ? `<button class="button" data-add="${item.id}">Add to cart ${arrow}</button>`
     : '<button class="button" disabled>Add to cart · coming soon</button>';
+  const image = colour?.photo
+    ? `<img src="${colour.photo}" alt="${p.name} in ${colour.name}">`
+    : `<img src="${p.image}" alt="${p.colours ? `${p.name} in all ${p.colours.length} colours` : p.name}"${focusStyle(p)}>`;
   return `
     <button class="close-dialog" aria-label="Close product details">×</button>
-    <img src="${item.image}" alt="${item.name}">
+    ${image}
     <div class="dialog-copy">
       <p class="eyebrow">${p.category} / CLUB COLLECTION</p>
       <h2 id="detail-title">${p.name}</h2>
       <p>${p.desc}</p>
       ${colourPicker(p, colour)}
+      <p class="maker-note">Designed and 3D-printed by our young apprentices, so every piece is one of a kind. Small marks, lines, or colour differences are part of the charm.</p>
       <p>${price}</p>
       <div class="actions">
         ${addButton}
@@ -677,7 +789,10 @@ document.querySelector('.cart-toggle').addEventListener('click', () => {
 document.addEventListener('click', (e) => {
   const trigger = e.target.closest('[data-product]');
   if (!trigger) return;
-  dialog.innerHTML = productDetail(products[Number(trigger.dataset.product)], trigger.dataset.colour);
+  dialog.innerHTML = productDetail(
+    products[Number(trigger.dataset.product)],
+    trigger.dataset.colour,
+  );
   dialog.querySelector('.close-dialog').onclick = () => dialog.close();
   dialog.showModal();
 });
@@ -685,12 +800,15 @@ document.addEventListener('click', (e) => {
 dialog.addEventListener('click', (e) => {
   const swatch = e.target.closest('[data-colour]');
   if (swatch) {
-    const item = items.find((i) => i.id === swatch.dataset.colour);
-    const img = dialog.querySelector(':scope > img');
-    img.src = item.image;
-    img.alt = item.name;
+    const choice = items.find((i) => i.id === swatch.dataset.colour);
+    const photo = dialog.querySelector(':scope > img');
+    if (choice?.photo && photo) {
+      photo.src = choice.photo;
+      photo.alt = choice.name;
+      photo.removeAttribute('style');
+    }
     dialog.querySelector('.colour-name').textContent = swatch.title;
-    dialog.querySelector('[data-add]')?.setAttribute('data-add', item.id);
+    dialog.querySelector('[data-add]')?.setAttribute('data-add', swatch.dataset.colour);
     dialog
       .querySelectorAll('[data-colour]')
       .forEach((s) => s.setAttribute('aria-pressed', String(s === swatch)));
@@ -722,18 +840,77 @@ cartDialog.addEventListener('click', (e) => {
   }),
 );
 
-/* ---------- Product filters ---------- */
+/* ---------- Rotating photo gallery ---------- */
 
-document.querySelectorAll('[data-filter]').forEach((b) =>
-  b.addEventListener('click', () => {
-    document
-      .querySelectorAll('[data-filter]')
-      .forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-    document.querySelector('#collection').innerHTML = cards(
-      products.filter((p) => b.dataset.filter === 'All' || p.category === b.dataset.filter),
-    );
-  }),
-);
+function setupGallery(root) {
+  const img = root.querySelector('.gallery-image');
+  const caption = root.querySelector('.gallery-caption');
+  const count = root.querySelector('.gallery-count');
+  const pauseButton = root.querySelector('.gallery-pause');
+  const photoUrl = (i) => `assets/gallery/${galleryPhotos[i][0]}`;
+  let index = 0;
+  let timer = null;
+  let held = false;
+  let paused = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function show(i) {
+    index = (i + galleryPhotos.length) % galleryPhotos.length;
+    const [, alt] = galleryPhotos[index];
+    img.classList.add('fading');
+    setTimeout(() => {
+      img.src = photoUrl(index);
+      img.alt = alt;
+    }, 200);
+    caption.textContent = alt;
+    count.textContent = `${index + 1} / ${galleryPhotos.length}`;
+    root.style.setProperty('--tilt', index % 2 ? '1.2deg' : '-1.2deg');
+    new Image().src = photoUrl((index + 1) % galleryPhotos.length);
+  }
+
+  function restart() {
+    clearInterval(timer);
+    if (!paused && !held) timer = setInterval(() => show(index + 1), 4500);
+  }
+
+  function setPaused(value) {
+    paused = value;
+    pauseButton.textContent = paused ? 'Play' : 'Pause';
+    pauseButton.setAttribute('aria-pressed', String(paused));
+    caption.setAttribute('aria-live', paused ? 'polite' : 'off');
+    restart();
+  }
+
+  img.addEventListener('load', () => img.classList.remove('fading'));
+  root.querySelector('.prev').addEventListener('click', () => {
+    show(index - 1);
+    restart();
+  });
+  root.querySelector('.next').addEventListener('click', () => {
+    show(index + 1);
+    restart();
+  });
+  pauseButton.addEventListener('click', () => setPaused(!paused));
+  root.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') show(index - 1);
+    if (e.key === 'ArrowRight') show(index + 1);
+  });
+  const hold = (value) => () => {
+    held = value;
+    restart();
+  };
+  root.addEventListener('mouseenter', hold(true));
+  root.addEventListener('mouseleave', hold(false));
+  root.addEventListener('focusin', hold(true));
+  root.addEventListener('focusout', (e) => {
+    if (!root.contains(e.relatedTarget)) hold(false)();
+  });
+
+  setPaused(paused);
+  new Image().src = photoUrl(1);
+}
+
+const galleryRoot = document.querySelector('.gallery');
+if (galleryRoot) setupGallery(galleryRoot);
 
 /* ---------- Memories ---------- */
 

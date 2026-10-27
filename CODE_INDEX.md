@@ -18,15 +18,16 @@ Use this map to find the code you want to edit. Search for the named function or
 ## app.js sections
 
 1. **Page setup** — selected page, album URL, and navigation entries.
-2. **Content data** — `celebrationPhotos`, `memories`, and `processSteps`.
-3. **Shared building blocks** — `money`, `productCard`, `cards`, `photoGrid`, and `memoryEntry`.
+2. **Content data** — `celebrationPhotos`, `memories`, `galleryPhotos`, and `processSteps`.
+3. **Shared building blocks** — `money`, `productCard`, `cards`, `photoGrid`, `memoryEntry`, and the `gallery` markup.
 4. **Header and footer** — shared navigation and footer HTML.
 5. **Pages** — `pages` contains page templates; `contactPage` serves joining and contact.
 6. **Mobile menu** — menu toggle and Escape key handling.
 7. **Product details and cart** — `setQty`, `renderCart`, `productDetail`, and `checkout`.
 8. **Product filters** — category button click handlers.
-9. **Memories** — `renderMemories` and year selection.
-10. **Contact form** — prepares an email draft on submit.
+9. **Rotating photo gallery** — `setupGallery` handles auto-rotation, arrows, pause, and keyboard.
+10. **Memories** — `renderMemories` and year selection.
+11. **Contact form** — prepares an email draft on submit.
 
 ## Debugging
 
@@ -35,4 +36,3 @@ Use this map to find the code you want to edit. Search for the named function or
 - Preview with `python -m http.server 4173 --bind 127.0.0.1`, then open `http://127.0.0.1:4173`.
 - Open browser developer tools with **F12**. The **Console** shows runtime errors; click an error's file and line number to inspect it. Use the **Sources** panel to place breakpoints.
 - For checkout failures, inspect `/api/checkout` in the **Network** panel and the server logs. Checkout requires Vercel or `vercel dev`; the Python preview does not run the API.
-- `_fmt-state.html`, `_fmt-state.js`, and `_fmt-open.js` are local preview helpers. `_fmt-state.js` clears local storage and changes sample prices, so do not load it on normal site pages.

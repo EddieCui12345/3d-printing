@@ -1,36 +1,79 @@
 // Prices are in cents (CAD), e.g. 2500 = $25.00. A null price shows "coming soon" and blocks checkout.
-// Add a `colours` list (id, name, swatch, image) to sell one product in several colours.
+// Add a `colours` list (id, name, swatch, thumb, photo) to sell one product in several colours.
+// `photo` is shown in the product dialog when that colour is picked; `thumb` is used in the cart.
+// `focus` sets which part of the photo stays visible when it is cropped (CSS object-position).
+// Only use photos of toys the apprentices actually made.
 // api/checkout.js charges from this list, so it is the only place prices need to change.
 const products = [
   {
-    id: 'chess-twist',
+    id: 'chess',
     name: 'Chess with a twist',
-    category: 'Games',
+    category: 'Chess',
     price: 1500,
-    image: 'assets/2024-12-21_6e24a0ff606b38.webp',
-    desc: 'A familiar game, with a whole new shape. Explore a cylindrical chess design from the club’s collection.',
+    image: 'assets/chess-lineup.jpg',
+    focus: 'center 72%',
+    desc: 'A familiar game, with a whole new shape. Our apprentices designed and 3D-printed this cylindrical chess set. Pick your favourite colour.',
+    colours: [
+      {
+        id: 'chess-black',
+        name: 'Black',
+        swatch: '#1f2026',
+        thumb: 'assets/chess-colours/black.jpg',
+        photo: 'assets/chess-colours/black-full.jpg',
+      },
+      {
+        id: 'chess-red',
+        name: 'Red',
+        swatch: '#d32f3c',
+        thumb: 'assets/chess-colours/red.jpg',
+        photo: 'assets/chess-colours/red-full.jpg',
+      },
+      {
+        id: 'chess-blue',
+        name: 'Blue',
+        swatch: '#2438b8',
+        thumb: 'assets/chess-colours/blue.jpg',
+        photo: 'assets/chess-colours/blue-full.jpg',
+      },
+      {
+        id: 'chess-pink',
+        name: 'Pink',
+        swatch: '#ec5d93',
+        thumb: 'assets/chess-colours/pink.jpg',
+        photo: 'assets/chess-colours/pink-full.jpg',
+      },
+      {
+        id: 'chess-orange',
+        name: 'Orange',
+        swatch: '#f39a1e',
+        thumb: 'assets/chess-colours/orange.jpg',
+        photo: 'assets/chess-colours/orange-full.jpg',
+      },
+    ],
   },
   {
     id: 'gonggi',
     name: 'A handful of colour',
     category: 'Games',
     price: 1500,
-    image: 'assets/IMG_4502.png',
-    desc: 'Small pieces. Big possibilities. This colourful gonggi set brings playful shapes to a classic game.',
+    image: 'assets/products/gonggi.jpg',
+    desc: 'Small pieces. Big possibilities. A colourful gonggi set our apprentices designed and 3D-printed, with flower-shaped pieces that sit in their own carry bars.',
   },
   {
-    id: 'chess',
-    name: 'Two-tone chess',
-    category: 'Chess',
+    id: 'tic-tac-toe',
+    name: 'Steamoji Tic Tac Toe',
+    category: 'Games',
     price: 1500,
-    desc: 'Friendly sculpted pieces on a bright two-tone board. Pick the colour that suits your next match.',
-    colours: [
-      { id: 'chess-blue', name: 'Blue', swatch: '#2f6fd0', image: 'assets/chess-blue.jpg' },
-      { id: 'chess-orange', name: 'Orange', swatch: '#f08a24', image: 'assets/chess-orange.jpg' },
-      { id: 'chess-green', name: 'Green', swatch: '#3e9b4f', image: 'assets/chess-green.png' },
-      { id: 'chess-red', name: 'Red', swatch: '#d33a3a', image: 'assets/chess-red.jpg' },
-      { id: 'chess-black', name: 'Black', swatch: '#222222', image: 'assets/chess-black.jpg' },
-    ],
+    image: 'assets/products/tic-tac-toe.jpg',
+    desc: 'Crosses versus Steamoji smiles. A big-grid twist on tic tac toe, designed and printed by the club to raise funds for BC Children’s Hospital.',
+  },
+  {
+    id: 'bingo',
+    name: 'Steamoji Bingo',
+    category: 'Games',
+    price: 1500,
+    image: 'assets/products/bingo.jpg',
+    desc: 'A standing bingo board filled with Steamoji tiles. Designed and 3D-printed by our apprentices.',
   },
 ];
 
