@@ -1,6 +1,7 @@
 // Prices are in cents (CAD), e.g. 2500 = $25.00. A null price shows "coming soon" and blocks checkout.
 // Add a `colours` list (id, name, swatch, thumb, photo) to sell one product in several colours.
 // `photo` is shown in the product dialog when that colour is picked; `thumb` is used in the cart.
+// `photos` (optional) lists extra pictures, shown as thumbnails in the product dialog.
 // `focus` sets which part of the photo stays visible when it is cropped (CSS object-position).
 // Only use photos of toys the apprentices actually made.
 // api/checkout.js charges from this list, so it is the only place prices need to change.
@@ -65,6 +66,7 @@ const products = [
     category: 'Games',
     price: 1500,
     image: 'assets/products/tic-tac-toe.jpg',
+    photos: ['assets/products/tic-tac-toe.jpg', 'assets/products/tic-tac-toe-board.jpg'],
     desc: 'Crosses versus Steamoji smiles. A big-grid twist on tic tac toe, designed and printed by the club to raise funds for BC Children’s Hospital.',
   },
   {
@@ -72,8 +74,18 @@ const products = [
     name: 'Steamoji Bingo',
     category: 'Games',
     price: 1500,
-    image: 'assets/products/bingo.jpg',
+    image: 'assets/products/bingo-board.jpg',
+    photos: ['assets/products/bingo-board.jpg', 'assets/products/bingo-tiles.jpg'],
     desc: 'A standing bingo board filled with Steamoji tiles. Designed and 3D-printed by our apprentices.',
+  },
+  {
+    id: 'clicky-fidgets',
+    name: '3D Printed Clicky Fidget Toys',
+    category: 'Toys',
+    price: 1500,
+    image: 'assets/products/clicky-fidgets.jpg',
+    photos: ['assets/products/clicky-fidgets.jpg', 'assets/products/clicky-fidgets-angle.jpg'],
+    desc: 'Press, click, repeat. Pocket-sized fidget clickers in playful designs, from Steamoji smiles and suns to ghosts and pixel hands. Many have a loop for a keychain.',
   },
 ];
 

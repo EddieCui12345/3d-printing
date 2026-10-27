@@ -58,6 +58,11 @@ const celebrationPhotos = [
     alt: 'A workshop bench with tools, filament spools, and printed parts',
     caption: 'The making table.',
   },
+  {
+    src: 'assets/memory-game-time.jpg',
+    alt: 'Two apprentices play a game on a blue Steamoji board with crosses and smiley pieces',
+    caption: 'Game on, with a board the club designed.',
+  },
 ];
 const storeMoments = celebrationPhotos.slice(3, 6);
 
@@ -285,7 +290,7 @@ const navLinks = nav
 
 const brand = `
   <a class="brand" href="index.html" aria-label="Steamoji Richmond Academy home">
-    <img class="brand-logo" src="assets/logo-mark.svg" alt="">
+    <img class="brand-logo" src="assets/logo-badge-180.png" alt="">
     <span class="brand-text" aria-hidden="true">
       <span class="brand-name">steam<span>oji</span></span>
       <span class="brand-tag">RICHMOND ACADEMY</span>
@@ -374,7 +379,7 @@ const pages = {
     <section class="about-section">
       <div class="wrap about-layout">
         <div class="workshop-photo">
-          <img src="assets/workshop-printers.jpg" style="object-position:center 68%" alt="Two 3D printers in the Steamoji Richmond maker room, beside a colourful pegboard wall of printed shelves" loading="lazy">
+          <img src="assets/workshop-printers.jpg" alt="Two 3D printers in the Steamoji Richmond maker room, beside a colourful pegboard wall of printed shelves" loading="lazy">
           <span class="photo-label">IDEAS BECOME REAL HERE.</span>
         </div>
         <div>
@@ -728,6 +733,14 @@ function colourPicker(p, colour) {
     </div>`;
 }
 
+function photoThumbs(p) {
+  const buttons = p.photos.map(
+    (src, i) =>
+      `<button class="photo-thumb" data-photo="${src}" aria-pressed="${i === 0}" aria-label="Show photo ${i + 1} of ${p.photos.length}"><img src="${src}" alt=""></button>`,
+  );
+  return `<div class="photo-thumbs" role="group" aria-label="More photos">${buttons.join('')}</div>`;
+}
+
 function productDetail(p, colourId) {
   const colour = p.colours && (p.colours.find((c) => c.id === colourId) || p.colours[0]);
   const item = colour ? items.find((i) => i.id === colour.id) : p;
@@ -741,9 +754,11 @@ function productDetail(p, colourId) {
   const image = colour?.photo
     ? `<img src="${colour.photo}" alt="${p.name} in ${colour.name}">`
     : `<img src="${p.image}" alt="${p.colours ? `${p.name} in all ${p.colours.length} colours` : p.name}"${focusStyle(p)}>`;
+  const thumbs = p.photos?.length > 1 ? photoThumbs(p) : '';
   return `
     <button class="close-dialog" aria-label="Close product details">×</button>
     ${image}
+    ${thumbs}
     <div class="dialog-copy">
       <p class="eyebrow">${p.category} / CLUB COLLECTION</p>
       <h2 id="detail-title">${p.name}</h2>
@@ -798,6 +813,14 @@ document.addEventListener('click', (e) => {
 });
 
 dialog.addEventListener('click', (e) => {
+  const thumb = e.target.closest('[data-photo]');
+  if (thumb) {
+    dialog.querySelector(':scope > img').src = thumb.dataset.photo;
+    dialog
+      .querySelectorAll('[data-photo]')
+      .forEach((t) => t.setAttribute('aria-pressed', String(t === thumb)));
+    return;
+  }
   const swatch = e.target.closest('[data-colour]');
   if (swatch) {
     const choice = items.find((i) => i.id === swatch.dataset.colour);

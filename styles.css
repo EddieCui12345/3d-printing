@@ -139,8 +139,8 @@ header {
   font-weight: 700;
 }
 .brand-logo {
-  width: 52px;
-  height: 52px;
+  width: 58px;
+  height: 58px;
   flex: none;
   transition: transform 0.3s;
 }
@@ -475,6 +475,28 @@ nav a[aria-current]:after {
   );
   pointer-events: none;
 }
+.photo-thumbs {
+  display: flex;
+  gap: 10px;
+  padding: 14px 30px 0;
+}
+.photo-thumb {
+  width: 76px;
+  height: 61px;
+  padding: 0;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--mist);
+  cursor: pointer;
+}
+.photo-thumb img {
+  height: 100%;
+}
+.photo-thumb[aria-pressed='true'] {
+  border-color: var(--navy);
+  box-shadow: 0 0 0 2px var(--yellow);
+}
 .maker-note {
   font-size: 14px;
   padding: 10px 14px;
@@ -537,13 +559,15 @@ nav a[aria-current]:after {
 }
 .workshop-photo {
   position: relative;
+  justify-self: center;
+  width: min(100%, 420px);
   transform: rotate(-3deg);
   padding: 12px;
   background: white;
   box-shadow: 0 6px 20px #1a1d5910;
 }
 .workshop-photo img {
-  height: 340px;
+  height: auto;
 }
 .photo-label {
   display: block;
@@ -1054,8 +1078,8 @@ dialog > img {
   .about-section {
     padding: 45px 0;
   }
-  .workshop-photo img {
-    height: 260px;
+  .workshop-photo {
+    width: min(100%, 320px);
   }
   .memory-teaser {
     display: block;
