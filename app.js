@@ -178,7 +178,7 @@ function productCard(p) {
     <article class="product-card">
       <button class="product-photo" data-product="${index}" aria-label="Explore ${p.name}">
         <img src="${p.image}" alt="${p.name}" loading="lazy"${focusStyle(p)}>
-        <span class="maker-badge">Kid-made · tiny quirks included</span>
+
         <span class="round-arrow">↗</span>
       </button>
       <div class="card-meta">${p.category} <span>Club collection</span></div>
@@ -334,7 +334,7 @@ document.querySelector('footer').innerHTML = `
 /* ---------- Pages ---------- */
 
 const pages = {
-  home: `
+home: `
     <section class="hero wrap">
       <div class="hero-copy">
         <p class="eyebrow"><span class="live-dot"></span> LITTLE MAKERS. BIG IMAGINATIONS.</p>
@@ -362,7 +362,56 @@ const pages = {
         <span class="art-dots" aria-hidden="true">···</span>
       </div>
     </section>
-    <div class="marquee" aria-label="Imagine, design, make, play, give back"><span>IMAGINE</span>✳<span>DESIGN</span>✳<span>MAKE</span>✳<span>PLAY</span>✳<span>GIVE BACK</span>✳</div>
+
+    <!-- NEW: Steamoji 3D Toy Design Club Program Overview -->
+    <section class="club-intro wrap section">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">DESIGNED BY APPRENTICES · CREATED WITH PURPOSE</p>
+          <h2>Young Creators. Big Ideas.<br><span class="accent">Real Impact.</span></h2>
+        </div>
+        <div>
+          <p class="lead">At Steamoji 3D Toy Design Club, we believe every child has the power to turn imagination into something extraordinary.</p>
+        </div>
+      </div>
+
+      <div class="club-grid">
+        <div class="club-card">
+          <h3>The Program</h3>
+          <p>Our apprentice-led club is a year-long program running from <strong>January to December</strong>, bringing together young innovators who are passionate about creativity, technology, entrepreneurship, and making a difference.</p>
+          <p>Throughout the year, our apprentices and dedicated facilitators work closely together to achieve ambitious goals. From brainstorming original ideas and learning 3D modeling to prototyping, 3D printing, product development, and marketing, apprentices take an active role in every stage of the creative journey.</p>
+          <p>What makes our club truly special is that everything is created by our apprentices. The products you see, the ideas behind them, and even this website are designed and developed by our young creators, with guidance and support from our facilitators.</p>
+        </div>
+
+        <div class="club-card">
+          <h3>Our Mission</h3>
+          <p>Our mission goes beyond designing and selling toys. Through hands-on experiences and real-world projects, apprentices develop creativity, problem-solving skills, teamwork, leadership, and entrepreneurial thinking. More importantly, they learn how to turn their skills and hard work into something meaningful.</p>
+          <p>Through fundraising initiatives, including support for <strong>BC Children's Hospital Foundation</strong>, our apprentices discover the joy of giving back and making a positive impact on the community.</p>
+          
+          <div class="motto-box">
+            <p><strong>Imagine It. Design It. Make It. Give Back.</strong></p>
+            <small>Made by Apprentices. Supported by Facilitators. Inspired by Purpose.</small>
+          </div>
+
+          ${button('join.html', 'Join the club')}
+        </div>
+      </div>
+    </section>
+
+    <section class="mayor-section wrap">
+  <p class="eyebrow">A MESSAGE FROM THE CITY OF RICHMOND</p>
+  <h2>A Greeting from the Mayor</h2>
+  <p>Mayor Malcolm D. Brodie's message of support for our fundraiser.</p>
+
+  <a href="assets/mayor%20greeting.jpg" target="_blank">
+    <img
+      src="assets/mayor%20greeting.jpg"
+      alt="Official Mayor's greeting letter"
+      class="mayor-letter"
+    >
+  </a>
+</section>
+
     <section class="section wrap">
       <div class="section-heading">
         <div>
@@ -376,6 +425,7 @@ const pages = {
       </div>
       ${cards(products.slice(0, 2))}
     </section>
+
     <section class="about-section">
       <div class="wrap about-layout">
         <div class="workshop-photo">
@@ -391,6 +441,7 @@ const pages = {
         </div>
       </div>
     </section>
+
     <section class="memory-teaser wrap">
       <figure class="memory-snap">
         <img src="assets/gallery/P2800237.jpg" alt="Apprentices and teachers celebrating together on December 18, 2025" loading="lazy">
@@ -437,22 +488,44 @@ const pages = {
     </section>
     ${cta}`,
 
-  about: `
+about: `
     ${intro(
       'HELLO, WE’RE STEAMOJI',
-      'Curiosity is<br><span class="accent">just the beginning.</span>',
-      'Hands-on learning for young makers, builders, innovators, and entrepreneurs.',
+      'Inspiring the next generation of<br><span class="accent">Makers, Innovators, Builders & Entrepreneurs.</span>',
+      'At Steamoji Richmond Academy, we empower children ages 5–14 to become confident creators, problem solvers, and changemakers.',
     )}
-    <section class="wrap split bottom-space">
-      <img class="rounded-image" src="assets/workshop-printers.jpg" style="object-position:center 68%" alt="Two 3D printers in the Steamoji Richmond maker room, beside a colourful pegboard wall of printed shelves">
-      <div>
-        <h2>Learning by making.</h2>
-        <p>Steamoji’s project-based STEM learning gives apprentices space to explore ideas, try different solutions, and build confidence through making.</p>
-        <p>The Apprentices’ 3D Toy Design Club connects that learning with real creations and a community fundraising initiative.</p>
+    <section class="wrap bottom-space about-flow-section">
+      <img class="flow-image" src="assets/workshop-printers.jpg" style="object-position:center 68%" alt="Two 3D printers in the Steamoji Richmond maker room, beside a colourful pegboard wall of printed shelves">
+      
+      <h2>Learning by Doing</h2>
+      <p>Our project-based curriculum is built around five key learning pathways designed to help apprentices think independently, solve real-world problems, and bring their imaginations to life:</p>
+      
+      <ul class="pathways-list">
+        <li><strong>Fabrication:</strong> 3D design, 3D printing, laser cutting, and hands-on product creation.</li>
+        <li><strong>Physical Computing:</strong> Electronics, Arduino, microcontrollers, sensors, and interactive technology.</li>
+        <li><strong>Engineering:</strong> Robotics, mechanical design, building, and engineering challenges.</li>
+        <li><strong>Digital Arts:</strong> Coding, game development, digital design, animation, stop-motion filmmaking, video production, and digital storytelling.</li>
+        <li><strong>Artificial Intelligence (AI):</strong> Machine learning, AI-powered creativity, data analysis, pattern recognition, and intelligent problem-solving.</li>
+      </ul>
+
+      <h2>Beyond the Classroom</h2>
+      <p>At Steamoji, learning goes beyond completing projects. Through initiatives such as our 3D Toy Design Club, apprentices apply their knowledge to real-world experiences. They design and develop products, collaborate with teammates, explore entrepreneurship, and contribute to meaningful community fundraising initiatives.</p>
+      <p>Even this website is designed and developed by our apprentices, demonstrating how their creativity and technical skills can make a real impact.</p>
+
+      <div class="motto-box">
+        <p><strong>Creating Today. Shaping Tomorrow.</strong></p>
+        <p>We believe children learn best when they are empowered to create, experiment, make mistakes, and discover solutions independently. At Steamoji, we don’t just teach technology — we inspire the next generation to create, innovate, and make a difference.</p>
+      </div>
+
+  <div class="actions" style="margin-bottom: 1.5rem;">
         ${button('https://www.steamoji.com/canada-bc-richmond-central', 'Visit Steamoji Richmond Central', true)}
-        <h3>Find your Richmond community</h3>
-        <p>Connect with Richmond Central or Richmond North to ask about programs, schedules, and joining the club.</p>
-        <a class="text-link" href="contact.html">Contact a Richmond location ↗</a>
+      </div>
+
+      <h3>Find your Richmond community</h3>
+      <p>Connect with Richmond Central or Richmond North to ask about programs, schedules, and joining the club.</p>
+      <a class="text-link" href="contact.html">Contact a Richmond location ↗</a>
+       
+      <div style="margin-bottom: 4rem;">
       </div>
     </section>
     ${cta}`,
