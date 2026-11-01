@@ -450,7 +450,9 @@ nav a[aria-current]:after {
   background: var(--mist);
 }
 .product-photo img {
-  height: 330px;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
   transition: transform 0.4s;
 }
 .product-photo:hover img {
@@ -879,7 +881,9 @@ dialog::backdrop {
   backdrop-filter: blur(5px);
 }
 dialog > img {
-  max-height: min(460px, 50vh);
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 .empty-note {
   padding: 40px 0;
@@ -1127,7 +1131,7 @@ dialog > img {
     gap: 35px;
   }
   .product-photo img {
-    height: 290px;
+    height: auto;
   }
   .about-layout,
   .split {
