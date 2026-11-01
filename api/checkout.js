@@ -7,14 +7,26 @@ const SQUARE_HOSTS = {
   sandbox: 'https://connect.squareupsandbox.com',
 };
 
+// Pasted dashboard values often include a newline or quotes. Square then rejects the token.
+const clean = (value) => String(value || '').trim().replace(/^['"]|['"]$/g, '');
+
+// Vercel Production should charge the live Square account. Sandbox stays the default
+// for local preview and for branch deployments, unless SQUARE_ENVIRONMENT is set.
+function squareEnvironment() {
+  const configured = clean(process.env.SQUARE_ENVIRONMENT).toLowerCase();
+  if (configured === 'production' || configured === 'sandbox') return configured;
+  return process.env.VERCEL_ENV === 'production' ? 'production' : 'sandbox';
+}
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ error: 'Method not allowed.' });
   }
 
-  const { SQUARE_ACCESS_TOKEN, SQUARE_LOCATION_ID, SQUARE_ENVIRONMENT = 'sandbox' } = process.env;
-  const squareHost = SQUARE_HOSTS[SQUARE_ENVIRONMENT];
+  const SQUARE_ACCESS_TOKEN = clean(process.env.SQUARE_ACCESS_TOKEN);
+  const SQUARE_LOCATION_ID = clean(process.env.SQUARE_LOCATION_ID);
+  const squareHost = SQUARE_HOSTS[squareEnvironment()];
   if (!SQUARE_ACCESS_TOKEN || !SQUARE_LOCATION_ID || !squareHost) {
     return res
       .status(500)
@@ -69,8 +81,14 @@ module.exports = async (req, res) => {
     });
     const data = await response.json();
     if (!response.ok || !data.payment_link?.url) {
+      const squareError = data.errors?.[0];
       console.error('Square checkout failed', response.status, data.errors);
-      return res.status(502).json({ error: 'Square could not start checkout. Please try again.' });
+      const detail = squareError?.detail || squareError?.code;
+      return res.status(502).json({
+        error: detail
+          ? `Square could not start checkout. ${detail}`
+          : 'Square could not start checkout. Please try again.',
+      });
     }
     return res.status(200).json({ url: data.payment_link.url });
   } catch (err) {
