@@ -902,52 +902,81 @@ dialog > img {
 .dialog-copy h2 {
   font-size: 35px;
 }
-/* Mayor's letter beside the Program and Mission */
-
-.mayor-program-layout {
+/* Club story */
+.club-grid {
   display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: 45px;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px 40px;
   align-items: start;
-  margin-top: 35px;
-}
-
-.program-copy {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
   min-width: 0;
 }
-
-.mayor-letter {
-  position: sticky;
-  top: 30px;
-  min-width: 0;
-  width: 60%;
-  margin: 0 auto;
+.club-card h3 {
+  font-size: 28px;
 }
-
-.mayor-letter img {
+.club-card .button {
+  margin-top: 18px;
+}
+.motto-box {
+  margin: 22px 0 4px;
+  padding: 16px 18px;
+  background: #fff;
+  border-radius: 10px;
+  border-left: 4px solid var(--yellow);
+}
+.motto-box p {
+  margin: 0;
+  color: var(--ink);
+}
+.motto-box p + p {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 15px;
+}
+.motto-box small {
   display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+/* Mayor's letter: its own band, shown near full page size so the type can be read. */
+.mayor-section {
+  background: var(--mist);
+  padding: 72px 0 84px;
+}
+.mayor-copy {
+  max-width: 920px;
+  margin: 0 auto 28px;
+}
+.mayor-copy h2 {
+  font-size: clamp(34px, 3.2vw, 48px);
+}
+.mayor-copy p:last-child {
+  max-width: 46ch;
+  margin-bottom: 0;
+}
+.mayor-sheet {
+  display: block;
+  max-width: 920px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 16px;
+  box-shadow: 0 18px 50px rgb(10 34 102 / 14%);
+}
+.mayor-sheet img {
   width: 100%;
   height: auto;
-  border-radius: 5px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  object-fit: contain;
 }
-
-
-
-/* Mobile layout */
-@media (max-width: 800px) {
-  .mayor-program-layout {
+@media (max-width: 760px) {
+  .club-grid {
     grid-template-columns: 1fr;
-    gap: 30px;
   }
-
-  .mayor-letter {
-    position: static;
-    max-width: 550px;
-    margin: 0 auto;
+  .mayor-section {
+    padding: 48px 0 56px;
+  }
+  .mayor-sheet {
+    padding: 8px;
   }
 }
 /* ---------- Responsive layouts and motion preferences ---------- */
@@ -1558,26 +1587,6 @@ dialog > img {
 }
 /* ---------- About page layout overrides ---------- */
 
-.about-stem-layout {
-  display: grid;
-  grid-template-columns: 1fr 1.35fr;
-  gap: 50px;
-  align-items: start;
-}
-
-.sticky-media {
-  position: sticky;
-  top: 30px;
-}
-
-.sticky-media img {
-  width: 100%;
-  height: auto;
-  border-radius: 14px;
-  object-fit: cover;
-  box-shadow: 0 8px 30px rgba(10, 34, 102, 0.12);
-}
-
 .pathways-list {
   display: flex;
   flex-direction: column;
@@ -1595,25 +1604,19 @@ dialog > img {
   color: var(--ink);
 }
 
-/* Responsive fallback for About page layout */
-@media (max-width: 800px) {
-  .about-stem-layout {
-    grid-template-columns: 1fr;
-    gap: 30px;
-  }
-  .sticky-media {
-    position: static;
-  }
-}
 /* ---------- Text wrapping around image layout ---------- */
 
 .about-flow-section {
-  display: block; /* Overrides grid layouts so float works */
+  display: flow-root;
+}
+
+.about-flow-section h2 {
+  margin-top: 28px;
 }
 
 .flow-image {
   float: left;
-  width: 420px; /* Adjust size here */
+  width: min(420px, 42%);
   height: 320px;
   object-fit: cover;
   border-radius: 14px;
@@ -1621,15 +1624,17 @@ dialog > img {
   margin-bottom: 20px;
 }
 
-/* Fix heading margins when aligned next to floated element */
 .about-flow-section h2:first-of-type {
   margin-top: 0;
 }
 
-/* Clear floating elements for actions and headings lower down if needed */
 .about-flow-section .actions,
 .about-flow-section h3 {
   clear: left;
+}
+
+.about-flow-section .actions {
+  margin: 8px 0 22px;
 }
 
 @media (max-width: 760px) {

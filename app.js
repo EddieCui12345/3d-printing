@@ -334,7 +334,7 @@ document.querySelector('footer').innerHTML = `
 /* ---------- Pages ---------- */
 
 const pages = {
-home: `
+  home: `
     <section class="hero wrap">
       <div class="hero-copy">
         <p class="eyebrow"><span class="live-dot"></span> LITTLE MAKERS. BIG IMAGINATIONS.</p>
@@ -363,7 +363,6 @@ home: `
       </div>
     </section>
 
-    <!-- NEW: Steamoji 3D Toy Design Club Program Overview -->
     <section class="club-intro wrap section">
       <div class="section-heading">
         <div>
@@ -386,8 +385,8 @@ home: `
         <div class="club-card">
           <h3>Our Mission</h3>
           <p>Our mission goes beyond designing and selling toys. Through hands-on experiences and real-world projects, apprentices develop creativity, problem-solving skills, teamwork, leadership, and entrepreneurial thinking. More importantly, they learn how to turn their skills and hard work into something meaningful.</p>
-          <p>Through fundraising initiatives, including support for <strong>BC Children's Hospital Foundation</strong>, our apprentices discover the joy of giving back and making a positive impact on the community.</p>
-          
+          <p>Through fundraising initiatives, including support for <strong>BC Children’s Hospital Foundation</strong>, our apprentices discover the joy of giving back and making a positive impact on the community.</p>
+
           <div class="motto-box">
             <p><strong>Imagine It. Design It. Make It. Give Back.</strong></p>
             <small>Made by Apprentices. Supported by Facilitators. Inspired by Purpose.</small>
@@ -397,20 +396,6 @@ home: `
         </div>
       </div>
     </section>
-
-    <section class="mayor-section wrap">
-  <p class="eyebrow">A MESSAGE FROM THE CITY OF RICHMOND</p>
-  <h2>A Greeting from the Mayor</h2>
-  <p>Mayor Malcolm D. Brodie's message of support for our fundraiser.</p>
-
-  <a href="assets/mayor%20greeting.jpg" target="_blank">
-    <img
-      src="assets/mayor%20greeting.jpg"
-      alt="Official Mayor's greeting letter"
-      class="mayor-letter"
-    >
-  </a>
-</section>
 
     <section class="section wrap">
       <div class="section-heading">
@@ -453,6 +438,19 @@ home: `
       </div>
       <a class="text-link" href="story.html">Open the scrapbook ${arrow}</a>
     </section>
+
+    <section class="mayor-section">
+      <div class="wrap">
+        <div class="mayor-copy">
+          <p class="eyebrow">A MESSAGE FROM THE CITY OF RICHMOND</p>
+          <h2>A greeting from the Mayor</h2>
+          <p>Mayor Malcolm D. Brodie’s message of support for the club’s fundraiser.</p>
+        </div>
+        <a class="mayor-sheet" href="assets/mayor%20greeting.jpg" target="_blank" rel="noopener noreferrer">
+          <img src="assets/mayor%20greeting.jpg" alt="Letter from Mayor Malcolm D. Brodie welcoming guests to the Steamoji 3D Toy Design Fundraiser">
+        </a>
+      </div>
+    </section>
     ${cta}`,
 
   products: `
@@ -482,13 +480,13 @@ home: `
       ${photoGrid(storeMoments)}
       <aside class="notice">
         <strong>A little play can make a difference.</strong>
-        <p>The club’s fundraising initiative supports BC Children’s Hospital. Prices, stock, and purchasing details will be shared when the collection is ready for sale.</p>
+        <p>The club’s fundraising initiative supports BC Children’s Hospital. Prices are on each creation, and checkout opens Square’s secure payment page.</p>
         <a href="impact.html" class="text-link">Learn about the initiative ↗</a>
       </aside>
     </section>
     ${cta}`,
 
-about: `
+  about: `
     ${intro(
       'HELLO, WE’RE STEAMOJI',
       'Inspiring the next generation of<br><span class="accent">Makers, Innovators, Builders & Entrepreneurs.</span>',
@@ -517,16 +515,13 @@ about: `
         <p>We believe children learn best when they are empowered to create, experiment, make mistakes, and discover solutions independently. At Steamoji, we don’t just teach technology — we inspire the next generation to create, innovate, and make a difference.</p>
       </div>
 
-  <div class="actions" style="margin-bottom: 1.5rem;">
+      <div class="actions">
         ${button('https://www.steamoji.com/canada-bc-richmond-central', 'Visit Steamoji Richmond Central', true)}
       </div>
 
       <h3>Find your Richmond community</h3>
       <p>Connect with Richmond Central or Richmond North to ask about programs, schedules, and joining the club.</p>
       <a class="text-link" href="contact.html">Contact a Richmond location ↗</a>
-       
-      <div style="margin-bottom: 4rem;">
-      </div>
     </section>
     ${cta}`,
 
