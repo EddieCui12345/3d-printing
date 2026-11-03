@@ -1,5 +1,5 @@
 // Local preview with working checkout: `npm run dev`, then open http://localhost:3000.
-// Serves the site, loads .env, and runs api/checkout.js the way Vercel does.
+// Serves the site, loads .env, and runs the api the way Vercel does.
 // Not deployed (see .vercelignore); Vercel runs the API itself.
 const http = require('http');
 const https = require('https');
@@ -11,7 +11,7 @@ const port = Number(process.env.PORT) || 3000;
 
 if (fs.existsSync(path.join(root, '.env'))) {
   for (const line of fs.readFileSync(path.join(root, '.env'), 'utf8').split(/\r?\n/)) {
-    const match = line.match(/^\s*([A-Z_][A-Z0-9_]*)\s*=\s*(.*?)\s*$/);
+    const match = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*?)\s*$/);
     if (match && match[2] && !(match[1] in process.env)) process.env[match[1]] = match[2];
   }
 }
@@ -53,6 +53,7 @@ function runApi(req, res, handler) {
   let raw = '';
   req.on('data', (chunk) => (raw += chunk));
   req.on('end', async () => {
+    req.rawBody = raw;
     try {
       req.body = raw ? JSON.parse(raw) : {};
     } catch {
@@ -70,11 +71,19 @@ function runApi(req, res, handler) {
 http
   .createServer((req, res) => {
     const url = new URL(req.url, `http://${req.headers.host}`);
-    if (url.pathname === '/api/checkout') {
-      delete require.cache[require.resolve('./api/checkout.js')];
-      delete require.cache[require.resolve('./products.js')];
+    const apis = {
+      '/api/checkout': './api/checkout.js',
+      '/api/order-notice': './api/order-notice.js',
+      '/api/square-webhook': './api/square-webhook.js',
+    };
+    if (apis[url.pathname]) {
+      for (const key of Object.keys(require.cache)) {
+        if (key.startsWith(root) && path.basename(key) !== 'dev-server.js') {
+          delete require.cache[key];
+        }
+      }
       req.headers['x-forwarded-proto'] = 'http';
-      return runApi(req, res, require('./api/checkout.js'));
+      return runApi(req, res, require(apis[url.pathname]));
     }
     const file = path.join(
       root,

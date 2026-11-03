@@ -3,6 +3,6 @@
   "private": true,
   "scripts": {
     "dev": "node dev-server.js",
-    "check": "node --check app.js && node --check products.js && node --check api/checkout.js"
+    "check": "node --check app.js && node --check products.js && node --check locations.js && node --check dev-server.js && node --check api/square.js && node --check api/buyer.js && node --check api/mail.js && node --check api/notify.js && node --check api/checkout.js && node --check api/order-notice.js && node --check api/square-webhook.js"
   }
 }

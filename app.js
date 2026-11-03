@@ -145,6 +145,11 @@ const button = (href, label, secondary = false) =>
   `<a class="button ${secondary ? 'secondary' : ''}" href="${href}">${label} ${arrow}</a>`;
 const money = (cents) =>
   new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD' }).format(cents / 100);
+const esc = (value) =>
+  String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;');
 const priceLabel = (p) => (p.price == null ? 'Prices & availability coming soon' : money(p.price));
 
 const intro = (eyebrow, title, text, extra = '') => `
@@ -640,12 +645,13 @@ const pages = {
     ${intro(
       'THANK YOU',
       'Your order is in.<br><span class="accent">Thanks for playing a part.</span>',
-      'Square will email your receipt. Your purchase supports the club’s fundraising for BC Children’s Hospital.',
+      'We’ll email a pickup confirmation to the parent and to Steamoji North. Square also emails a payment receipt. Your purchase supports the club’s fundraising for BC Children’s Hospital.',
     )}
     <section class="wrap bottom-space">
       <aside class="notice">
         <h2>Questions about your order?</h2>
-        <p>Contact the club and include the name and email you used at checkout.</p>
+        <p>Contact the location and include the parent’s name and email from checkout.</p>
+        <p class="order-status" role="status"></p>
         <div class="actions">
           ${button('contact.html', 'Contact the club')}
           ${button('products.html', 'Back to the collection', true)}
@@ -670,25 +676,23 @@ function contactPage() {
       <div>
         <h2>Find your people.</h2>
         <p>Choose a Richmond location and tell us what you’d like to know. The team can help with ages, schedules, and availability.</p>
+        ${pickupLocations
+          .map(
+            (loc) => `
         <address class="location-card">
-          <h3>Richmond Central</h3>
-          <a href="https://www.google.com/maps/search/?api=1&query=140-8031+Williams+Road+Richmond+BC+V7A+1G4" target="_blank" rel="noopener">140-8031 Williams Road<br>Richmond, BC V7A 1G4</a>
-          <a href="tel:+16044478999">(604) 447-8999</a>
-          <a href="mailto:richmondcentral@steamoji.com">richmondcentral@steamoji.com</a>
-        </address>
-        <address class="location-card">
-          <h3>Richmond North</h3>
-          <a href="https://www.google.com/maps/search/?api=1&query=116-4940+No.+3+Road+Richmond+BC+V6X+3A5" target="_blank" rel="noopener">116-4940 No. 3 Road<br>Richmond, BC V6X 3A5</a>
-          <a href="tel:+16042732555">(604) 273-2555</a>
-          <a href="mailto:richmondnorth@steamoji.com">richmondnorth@steamoji.com</a>
-        </address>
+          <h3>${loc.name}</h3>
+          <a href="${loc.maps}" target="_blank" rel="noopener">${loc.lines.join('<br>')}</a>
+          <a href="tel:${loc.tel}">${loc.phone}</a>
+          <a href="mailto:${loc.email}">${loc.email}</a>
+        </address>`,
+          )
+          .join('')}
       </div>
       <form class="contact-form">
         <label>Your name<input name="name" required autocomplete="name"></label>
         <label>Your email<input name="email" type="email" required autocomplete="email"></label>
         <label>Location<select name="location">
-          <option value="richmondcentral">Richmond Central</option>
-          <option value="richmondnorth">Richmond North</option>
+          ${pickupLocations.map((loc) => `<option value="${loc.id}">${loc.name}</option>`).join('')}
         </select></label>
         <label>What would you like to know?<textarea name="message" rows="4" required></textarea></label>
         <button class="button" type="submit">Prepare an email ↗</button>
@@ -750,6 +754,38 @@ function setQty(id, qty) {
   renderCart();
 }
 
+const pickupKey = 'steamoji-pickup';
+let pickup = {};
+try {
+  pickup = JSON.parse(sessionStorage.getItem(pickupKey)) || {};
+} catch {}
+
+function rememberPickup(next) {
+  pickup = next;
+  try {
+    sessionStorage.setItem(pickupKey, JSON.stringify(pickup));
+  } catch {}
+}
+
+function readPickup() {
+  const form = cartDialog.querySelector('.pickup-form');
+  if (!form) return pickup;
+  const data = new FormData(form);
+  rememberPickup({
+    location: String(data.get('location') || ''),
+    parentName: String(data.get('parentName') || ''),
+    parentEmail: String(data.get('parentEmail') || ''),
+    parentPhone: String(data.get('parentPhone') || ''),
+    childName: String(data.get('childName') || ''),
+  });
+  return pickup;
+}
+
+function locationBlurb(id) {
+  const loc = pickupLocations.find((item) => item.id === id);
+  return loc ? `${loc.lines.join(', ')} · ${loc.phone}` : '';
+}
+
 function cartLine({ p, qty }) {
   return `
     <div class="cart-line">
@@ -757,31 +793,63 @@ function cartLine({ p, qty }) {
       <div>
         <h3>${p.name}</h3>
         <p>${money(p.price)} each</p>
-        <button class="remove-line" data-qty="${p.id}" data-value="0">Remove</button>
+        <button type="button" class="remove-line" data-qty="${p.id}" data-value="0">Remove</button>
       </div>
       <div class="qty">
-        <button data-qty="${p.id}" data-value="${qty - 1}" aria-label="One fewer ${p.name}">−</button>
+        <button type="button" data-qty="${p.id}" data-value="${qty - 1}" aria-label="One fewer ${p.name}">−</button>
         <span>${qty}</span>
-        <button data-qty="${p.id}" data-value="${qty + 1}" aria-label="One more ${p.name}">+</button>
+        <button type="button" data-qty="${p.id}" data-value="${qty + 1}" aria-label="One more ${p.name}">+</button>
       </div>
     </div>`;
 }
 
 function renderCart() {
+  readPickup();
   const lines = Object.entries(cart).map(([id, qty]) => ({ p: sellable(id), qty }));
   const total = lines.reduce((sum, l) => sum + l.p.price * l.qty, 0);
+  const locationChoices = pickupLocations
+    .map(
+      (loc) =>
+        `<option value="${loc.id}"${loc.id === pickup.location ? ' selected' : ''}>${loc.name}</option>`,
+    )
+    .join('');
   const contents = lines.length
     ? `
+      <form class="pickup-form">
       ${lines.map(cartLine).join('')}
       <div class="cart-total"><span>Total</span><span>${money(total)}</span></div>
-      <button class="button checkout">Checkout with Square ${arrow}</button>
-      <p class="cart-note">You’ll pay on Square’s secure checkout page. Your purchase supports the club’s fundraising for BC Children’s Hospital.</p>
-      <p class="cart-note" role="status"></p>`
+      <fieldset class="cart-fields">
+        <legend>Pickup details</legend>
+        <p class="cart-note">Choose a Richmond location. A parent’s name, email, and phone are required. The child’s name is optional.</p>
+        <label>Pickup location
+          <select name="location" required>
+            <option value="">Choose a location</option>
+            ${locationChoices}
+          </select>
+        </label>
+        <p class="pickup-address">${esc(locationBlurb(pickup.location))}</p>
+        <label>Parent’s name
+          <input name="parentName" required maxlength="80" autocomplete="name" value="${esc(pickup.parentName)}">
+        </label>
+        <label>Parent’s email
+          <input name="parentEmail" type="email" required maxlength="120" autocomplete="email" value="${esc(pickup.parentEmail)}">
+        </label>
+        <label>Parent’s phone
+          <input name="parentPhone" type="tel" required maxlength="30" autocomplete="tel" inputmode="tel" pattern="[+0-9(). -]{10,30}" title="Enter a phone number with the area code" value="${esc(pickup.parentPhone)}">
+        </label>
+        <label>Child’s name <span class="optional">optional</span>
+          <input name="childName" maxlength="80" autocomplete="off" value="${esc(pickup.childName)}">
+        </label>
+      </fieldset>
+      <button class="button checkout" type="submit">Checkout with Square ${arrow}</button>
+      <p class="cart-note">You’ll pay on Square’s secure page. After payment, the parent and Steamoji North each get an email with the toys, quantities, and pickup details.</p>
+      <p class="cart-note" role="status"></p>
+      </form>`
     : `
       <p>Your cart is empty.</p>
       ${button('products.html', 'Browse the collection')}`;
   cartDialog.innerHTML = `
-    <button class="close-dialog" aria-label="Close cart">×</button>
+    <button class="close-dialog" type="button" aria-label="Close cart">×</button>
     <div class="cart-body">
       <h2 id="cart-title">Your cart</h2>
       ${contents}
@@ -841,18 +909,30 @@ function productDetail(p, colourId) {
     </div>`;
 }
 
+function rememberOrder(orderId, pickupToken) {
+  try {
+    if (orderId) sessionStorage.setItem('steamoji-order', orderId);
+    if (pickupToken) sessionStorage.setItem('steamoji-pickup-token', pickupToken);
+  } catch {}
+}
+
 async function checkout(checkoutButton) {
   const status = cartDialog.querySelector('[role="status"]');
+  const buyer = readPickup();
   checkoutButton.disabled = true;
   status.textContent = 'Opening Square checkout…';
   try {
     const res = await fetch('/api/checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items: Object.entries(cart).map(([id, qty]) => ({ id, qty })) }),
+      body: JSON.stringify({
+        items: Object.entries(cart).map(([id, qty]) => ({ id, qty })),
+        buyer,
+      }),
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok || !data.url) throw new Error(data.error);
+    rememberOrder(data.orderId, data.pickupToken);
     location.href = data.url;
   } catch (err) {
     checkoutButton.disabled = false;
@@ -861,7 +941,52 @@ async function checkout(checkoutButton) {
   }
 }
 
-if (page === 'thanks') cart = {};
+async function confirmPickupEmail(orderId, fromSquare) {
+  const status = document.querySelector('.order-status');
+  if (!status) return;
+  status.textContent = 'Sending the pickup confirmation…';
+  let savedToken = '';
+  try {
+    savedToken = sessionStorage.getItem('steamoji-pickup-token') || '';
+  } catch {}
+  try {
+    const res = await fetch('/api/order-notice', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ orderId, pickupToken: savedToken }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (data.sent) {
+      status.textContent = data.already
+        ? 'The pickup confirmation was already emailed to the parent and Steamoji North.'
+        : 'We emailed a pickup confirmation to the parent and Steamoji North.';
+      return;
+    }
+    if (data.pending) {
+      status.textContent = fromSquare
+        ? 'Your payment is still being confirmed. Refresh this page in a moment and we’ll send the pickup email.'
+        : '';
+      return;
+    }
+    status.textContent =
+      data.error ||
+      'Your payment went through. We could not send the pickup email, so please contact the location and mention the parent’s name.';
+  } catch {
+    status.textContent =
+      'Your payment went through. We could not send the pickup email, so please contact the location and mention the parent’s name.';
+  }
+}
+
+if (page === 'thanks') {
+  cart = {};
+  const params = new URLSearchParams(location.search);
+  let savedOrder = '';
+  try {
+    savedOrder = sessionStorage.getItem('steamoji-order') || '';
+  } catch {}
+  const orderId = params.get('orderId') || savedOrder;
+  if (orderId) confirmPickupEmail(orderId, params.has('orderId'));
+}
 saveCart();
 
 document.querySelector('.cart-toggle').addEventListener('click', () => {
@@ -916,7 +1041,20 @@ cartDialog.addEventListener('click', (e) => {
   if (e.target.closest('.close-dialog')) return cartDialog.close();
   const qtyButton = e.target.closest('[data-qty]');
   if (qtyButton) return setQty(qtyButton.dataset.qty, Number(qtyButton.dataset.value));
-  const checkoutButton = e.target.closest('.checkout');
+});
+cartDialog.addEventListener('input', (e) => {
+  if (e.target.closest('.pickup-form')) readPickup();
+});
+cartDialog.addEventListener('change', (e) => {
+  if (!e.target.closest('.pickup-form')) return;
+  readPickup();
+  const address = cartDialog.querySelector('.pickup-address');
+  if (address && e.target.name === 'location') address.textContent = locationBlurb(pickup.location);
+});
+cartDialog.addEventListener('submit', (e) => {
+  if (!e.target.classList.contains('pickup-form')) return;
+  e.preventDefault();
+  const checkoutButton = e.target.querySelector('.checkout');
   if (checkoutButton) checkout(checkoutButton);
 });
 
@@ -1021,13 +1159,12 @@ if (page === 'story') {
 
 /* ---------- Contact form ---------- */
 
-document.querySelector('form')?.addEventListener('submit', (e) => {
+document.querySelector('.contact-form')?.addEventListener('submit', (e) => {
   e.preventDefault();
   const data = new FormData(e.target);
   const recipient =
-    data.get('location') === 'richmondnorth'
-      ? 'richmondnorth@steamoji.com'
-      : 'richmondcentral@steamoji.com';
+    pickupLocations.find((loc) => loc.id === data.get('location'))?.email ||
+    pickupLocations[0].email;
   const body = `Hello Steamoji,\n\n${data.get('message')}\n\nFrom: ${data.get('name')}\nEmail: ${data.get('email')}`;
   const subject = encodeURIComponent('3D Toy Design Club enquiry');
   window.location.href = `mailto:${recipient}?subject=${subject}&body=${encodeURIComponent(body)}`;

@@ -6,18 +6,20 @@ A responsive static website using HTML, CSS, and vanilla JavaScript. No build or
 
 Run `npm run dev` in this folder and open http://localhost:3000. It serves the site and runs the Square checkout using the keys in `.env` (copy `.env.example`), so the cart can be tested end to end with sandbox payments.
 
-After changing `app.js`, `products.js`, or `styles.css`, bump the `?v=` number on their links in every HTML page so browsers load the new files.
+After changing `app.js`, `products.js`, `locations.js`, or `styles.css`, bump the `?v=` number on their links in every HTML page so browsers load the new files.
 
 ## Content and maintenance
 
 See [CODE_INDEX.md](CODE_INDEX.md) for a file and function index, editor navigation shortcuts, and debugging instructions. Run `npm run check` to check application JavaScript syntax without installing packages.
 
-- `app.js` contains shared navigation, page content, the cart, and memory records. `products.js` holds the product list and prices.
+- `app.js` contains shared navigation, page content, the cart, and memory records. `products.js` holds the product list and prices. `locations.js` holds the Richmond pickup locations.
 - Add products to `products.js` with a unique `id`, name, category, `price` in cents (CAD), image path, and description. A `null` price shows "coming soon" and disables "Add to cart". To sell one product in several colours, keep one `image` that shows every colour and add a `colours` list (each with its own `id`, `name`, `swatch` hex colour, and a small `thumb` used in the cart). An optional `focus` (for example `center 72%`) keeps the important part of a photo visible when it is cropped. Only use photos of toys the apprentices made. Update the filter choices if introducing new categories.
 
 ## Cart and Square checkout
 
-The cart is saved in the visitor's browser. "Checkout with Square" calls `api/checkout.js`, a Vercel serverless function that looks up prices in `products.js`, creates a Square payment link for the whole order, and sends the shopper to Square's hosted checkout. After paying, Square returns them to `thanks.html`, which empties the cart.
+The cart is saved in the visitor's browser. Before payment, a parent chooses a Richmond pickup location and enters their name, email, and phone. The child’s name is optional. "Checkout with Square" calls `api/checkout.js`, a Vercel serverless function that looks up prices in `products.js`, stores those pickup details on the Square payment, creates a payment link for the whole order, and sends the shopper to Square's hosted checkout. After paying, Square returns them to `thanks.html`, which empties the cart and asks `api/order-notice.js` to email the parent and the pickup location. Each email lists the products, quantities, location, and parent details.
+
+Those emails are sent through the Steamoji North Gmail. Add `email` and `emailAppPassword` from `.env.example` in Vercel. That same address sends both messages and receives the club’s copy. The app password comes from the Google account’s security settings. Until those are set, checkout still works and the pickup details remain on the Square payment, but the confirmation emails are not sent. A Square `payment.updated` webhook (`api/square-webhook.js`) sends the same emails if the buyer does not return to the thank-you page. Subscribe to that event in the Square dashboard and set `SQUARE_WEBHOOK_SIGNATURE_KEY` and `SQUARE_WEBHOOK_URL`.
 
 1. In the [Square Developer Dashboard](https://developer.squareup.com/apps), create an application and copy its access token and location ID. Start with the sandbox values to test with fake cards.
 2. In Vercel, open Project Settings > Environment Variables and add the variables listed in `.env.example`.
@@ -32,4 +34,4 @@ Checkout works on Vercel and with `npm run dev`. A plain static server (such as 
 
 The contact form prepares a draft in the visitor’s email application. It does not send or store submissions. There is no inventory tracking, CMS, or automatic album synchronization. Future years and entries are added by editing the data in `app.js`.
 
-Google Fonts is optional; fallback fonts work offline. Reduced-motion preferences are respected. The site is intended for Vercel: static pages are served as-is and `api/` holds the checkout function.
+Google Fonts is optional; fallback fonts work offline. Reduced-motion preferences are respected. The site is intended for Vercel: static pages are served as-is and `api/` holds checkout and the pickup emails.
