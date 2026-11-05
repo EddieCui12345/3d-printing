@@ -69,6 +69,14 @@ const storeMoments = celebrationPhotos.slice(3, 6);
 // Add approved memories here as they become available. Keep dates and captions factual.
 const memories = [
   {
+    year: '2026',
+    type: 'Stories',
+    title: '2026',
+    description:
+      '2026 project stories, event photos, and edited videos will be added as they are ready to share.',
+    comingSoon: true,
+  },
+  {
     year: '2025',
     type: 'Celebration',
     title: '3D Toy Club Celebration',
@@ -213,6 +221,14 @@ function photoGrid(items) {
 }
 
 function memoryEntry(m) {
+  if (m.comingSoon) {
+    return `
+      <article class="notice">
+        <p class="eyebrow">COMMUNITY / ${m.type} / ${m.year}</p>
+        <h2>${m.title}</h2>
+        <p>${m.description}</p>
+      </article>`;
+  }
   return `
     <article class="album-card">
       <figure class="album-art"><img src="${m.cover}" alt="${m.title}"></figure>
@@ -227,6 +243,7 @@ function memoryEntry(m) {
 }
 
 const yearOptions = [...new Set(memories.map((m) => m.year))]
+  .sort()
   .map((y) => `<option value="${y}">${y}</option>`)
   .join('');
 
@@ -439,7 +456,7 @@ const pages = {
       <div>
         <p class="eyebrow">MORE THAN THE THINGS WE MAKE</p>
         <h2>The memories we make together.</h2>
-        <p>Certificates, shared creations, and a fundraising moment from December 18, 2025. A growing scrapbook for our community, year after year.</p>
+        <p>Certificates, shared creations, and a fundraising moment from December 18, 2025. 2026 project stories, event photos, and edited videos will be added as they are ready to share.</p>
       </div>
       <a class="text-link" href="story.html">Open the scrapbook ${arrow}</a>
     </section>
@@ -574,7 +591,7 @@ const pages = {
     )}
     <section class="wrap bottom-space">
       <div class="steps">${stepCards}</div>
-      <aside class="notice">Workshop photos from the December 2025 celebration are in the scrapbook. Project stories and edited event videos will be added as they are ready to share.</aside>
+      <aside class="notice">2026 project stories, event photos, and edited videos will be added as they are ready to share.</aside>
     </section>
     ${cta}`,
 
