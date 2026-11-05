@@ -78,6 +78,46 @@ const memories = [
     cover: 'assets/memory-2025-club.jpg',
     photos: celebrationPhotos,
   },
+  {
+    year: '2026',
+    type: 'Club sessions',
+    title: '2026 Club Sessions',
+    cover: 'assets/2026-photo-29.jpg',
+    description:
+      'A collection of photos and videos from Steamoji Richmond Central club sessions in 2026. More project stories and edited videos will be added as they are ready to share.',
+    url: '#gallery',
+    photos: [
+      { src: 'assets/2026-photo-03.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'The Steamoji Richmond classroom during a session'},
+      { src: 'assets/2026-photo-04.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'Two apprentices working together on a laptop.' },
+      { src: 'assets/2026-photo-05.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'A mentor helps an apprentice at a laptop.' },
+      { src: 'assets/2026-photo-06.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'A moment from the 2026 club sessions.' },
+      { src: 'assets/2026-photo-08.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'An apprentice at a classroom desk with a laptop' },
+      { src: 'assets/2026-photo-10.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'A moment from the 2026 club sessions.' },
+      { src: 'assets/2026-photo-11.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'An apprentice at a classroom desk with a laptop' },
+      { src: 'assets/2026-photo-12.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'Two apprentices working together on a laptop.' },
+      { src: 'assets/2026-photo-13.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'An apprentice at a classroom desk with a laptop' },
+      { src: 'assets/2026-photo-14.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'An apprentice at a classroom desk with a laptop' },
+      { src: 'assets/2026-photo-16.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'An apprentice at a classroom desk with a laptop' },
+      { src: 'assets/2026-photo-17.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'A moment from the 2026 club sessions.' },
+      { src: 'assets/2026-photo-18.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'A 3D design being shown on a laptop.' },
+      { src: 'assets/2026-photo-21.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'Two apprentices working together on a laptop.' },
+      { src: 'assets/2026-photo-22.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'A moment from the 2026 club sessions.' },
+      { src: 'assets/2026-photo-23.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'A moment from the 2026 club sessions.' },
+      { src: 'assets/2026-photo-24.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'The Steamoji Richmond classroom during a session' },
+      { src: 'assets/2026-photo-25.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'A mentor helps an apprentice at a laptop.' },
+      { src: 'assets/2026-photo-26.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'Many apprentices working together on a laptop.' },
+      { src: 'assets/2026-photo-27.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'A moment from the 2026 club sessions.' },
+      { src: 'assets/2026-photo-30.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'An apprentice at a classroom desk with a laptop' },
+      { src: 'assets/2026-photo-31.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'An apprentice at a classroom desk with a laptop' },
+      { src: 'assets/2026-photo-32.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'A moment from the 2026 club sessions.' },
+      { src: 'assets/2026-photo-33.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'An apprentice at a classroom desk with a laptop' },
+      { src: 'assets/2026-photo-34.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'An apprentice at a classroom desk with a laptop' },
+      { src: 'assets/2026-photo-37.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'An apprentice at a classroom desk with a laptop' },
+      { src: 'assets/2026-photo-38.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'An apprentice at a classroom desk with a laptop' },
+      { src: 'assets/2026-photo-40.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'An apprentice asking a mentor a question.' },
+      { src: 'assets/2026-photo-41.jpg', alt: 'A photo from a 2026 Steamoji club session', caption: 'A moment from the 2026 club sessions.' }
+    ]
+  },
 ];
 
 // Photos for the rotating gallery on the Stories & memories page, stored in assets/gallery/.
@@ -218,7 +258,24 @@ function memoryEntry(m) {
         ${button(m.url, 'See every photo & video', true)}
       </div>
     </article>
-    ${m.photos ? photoGrid(m.photos) : ''}`;
+    ${m.photos ? photoGrid(m.photos) : ''}
+    ${
+      m.videos?.length
+        ? `<section class="memory-videos" aria-label="2026 club session videos">
+            <h3>Club session videos</h3>
+            <div class="memory-video-grid">
+              ${m.videos.map((src, i) => `
+                <figure>
+                  <video controls preload="metadata">
+                    <source src="${src}" type="video/mp4">
+                    Your browser does not support this video.
+                  </video>
+                  <figcaption>2026 club session video ${i + 1}</figcaption>
+                </figure>`).join('')}
+            </div>
+          </section>`
+        : ''
+    }`;
 }
 
 const yearOptions = [...new Set(memories.map((m) => m.year))]
@@ -466,7 +523,69 @@ const pages = {
           <h2>Toys made by our apprentices.</h2>
         </div>
       </div>
-      <div id="collection">${cards()}</div>
+      <div id="collection"><div class="product-grid">
+    <article class="product-card">
+      <button class="product-photo" data-product="0" aria-label="Explore Roll-Up Chess Set">
+        <img src="assets/chess-lineup.jpg" alt="Roll-Up Chess Set" loading="lazy" style="object-position:center 72%">
+
+        <span class="round-arrow">↗</span>
+      </button>
+      <div class="card-meta">Chess <span>Club collection</span></div>
+      <h3><button class="text-button" data-product="0">Roll-Up Chess Set</button></h3>
+      <p>Designed in 2025: Enjoy a classic game of chess wherever you go! Our specially designed chess set features a flexible, roll-up board that makes it easy to store and carry. Perfect for family game nights, friendly competitions, or taking on your next adventure. <br> Available in a variety of colours to suit your style.</p>
+      <div class="card-swatches"><button class="swatch small" style="--swatch:#1f2026" data-product="0" data-colour="chess-black" aria-label="Roll-Up Chess Set in Black" title="Black"></button><button class="swatch small" style="--swatch:#d32f3c" data-product="0" data-colour="chess-red" aria-label="Roll-Up Chess Set in Red" title="Red"></button><button class="swatch small" style="--swatch:#2438b8" data-product="0" data-colour="chess-blue" aria-label="Roll-Up Chess Set in Blue" title="Blue"></button><button class="swatch small" style="--swatch:#0ac900" data-product="0" data-colour="chess-green" aria-label="Roll-Up Chess Set in Green" title="Green"></button><button class="swatch small" style="--swatch:#f39a1e" data-product="0" data-colour="chess-orange" aria-label="Roll-Up Chess Set in Orange" title="Orange"></button><span>5 colours</span></div>
+      <small>$30.00</small>
+    </article>
+    <article class="product-card">
+      <button class="product-photo" data-product="1" aria-label="Explore Gonggi Game">
+        <img src="assets/products/gonggi.jpg" alt="Gonggi Game" loading="lazy">
+
+        <span class="round-arrow">↗</span>
+      </button>
+      <div class="card-meta">Games <span>Club collection</span></div>
+      <h3><button class="text-button" data-product="1">Gonggi Game</button></h3>
+      <p>Designed in 2025: Discover the fun of Gonggi, a traditional Korean game that challenges hand-eye coordination, concentration, and quick reflexes! Players toss and catch small game pieces while completing increasingly challenging levels. Simple to learn, fun to master, and perfect for playing with friends and family! <br> Please Note: Colours are randomly selected based on available stock. Specific colours cannot be guaranteed.</p>
+      
+      <small>$8.00</small>
+    </article>
+    <article class="product-card">
+      <button class="product-photo" data-product="2" aria-label="Explore Steamoji Tic Tac Toe">
+        <img src="assets/products/tic-tac-toe.jpg" alt="Steamoji Tic Tac Toe" loading="lazy">
+
+        <span class="round-arrow">↗</span>
+      </button>
+      <div class="card-meta">Games <span>Club collection</span></div>
+      <h3><button class="text-button" data-product="2">Steamoji Tic Tac Toe</button></h3>
+      <p>A classic game with a creative twist! Our handmade Tic-Tac-Toe set brings this timeless strategy game to life with colourful, 3D-printed pieces. Challenge your friends or family, think ahead, and see who can get four in a row! Fun, easy to play, and perfect for all ages.</p>
+      
+      <small>$25.00</small>
+    </article>
+    <article class="product-card">
+      <button class="product-photo" data-product="3" aria-label="Explore Connect 3">
+        <img src="assets/products/bingo-board.jpg" alt="Connect 3" loading="lazy">
+
+        <span class="round-arrow">↗</span>
+      </button>
+      <div class="card-meta">Games <span>Club collection</span></div>
+      <h3><button class="text-button" data-product="3">Connect 3</button></h3>
+      <p>Bring everyone together for a fun-filled game of Connect 3! Our creatively designed 5×5 game board adds a playful twist to this classic-style game. It is a fun way to spend quality time with family and friends while practising strategy, problem-solving, and critical thinking. Perfect for family game nights, parties, and friendly competitions!</p>
+      
+      <small>$25.00</small>
+    </article>
+    <article class="product-card">
+      <button class="product-photo" data-product="4" aria-label="Explore 3D Printed Clicky Fidget Toys">
+        <img src="assets/products/clicky-fidgets.jpg" alt="3D Printed Clicky Fidget Toys" loading="lazy">
+
+        <span class="round-arrow">↗</span>
+      </button>
+      <div class="card-meta">Toys <span>Club collection</span></div>
+      <h3><button class="text-button" data-product="4">3D Printed Clicky Fidget Toys</button></h3>
+      <p>Click, play, and enjoy! Our Clicky Fidget Toys come in a variety of fun and creative designs, each offering a satisfying clicking experience. These small, playful toys are perfect for keeping your hands busy and make wonderful little gifts for friends and family. <br> Each set includes 4 randomly selected, different designs.</p>
+      
+      <small>$19.00</small>
+    </article></div></div>
+    <br>
+    <br>
       <div class="section-heading">
         <div>
           <p class="eyebrow">FROM THE CELEBRATION</p>
@@ -535,8 +654,7 @@ const pages = {
       <div class="filter-bar">
         <label for="memory-year">Explore by year</label>
         <select id="memory-year">
-          <option value="all">All memories</option>
-          ${yearOptions}
+          ${yearOptions.replace('<option value="2025">2025</option>', '<option value="2025" selected>2025</option>')}
         </select>
       </div>
       <div id="memories"></div>
@@ -569,7 +687,6 @@ const pages = {
     )}
     <section class="wrap bottom-space">
       <div class="steps">${stepCards}</div>
-      <aside class="notice">Workshop photos from the December 2025 celebration are in the scrapbook. Project stories and edited event videos will be added as they are ready to share.</aside>
     </section>
     ${cta}`,
 
@@ -1005,15 +1122,15 @@ if (galleryRoot) setupGallery(galleryRoot);
 
 /* ---------- Memories ---------- */
 
-function renderMemories(year = 'all') {
+function renderMemories(year = '2025') {
   document.querySelector('#memories').innerHTML = memories
-    .filter((m) => year === 'all' || m.year === year)
+    .filter((m) => m.year === year)
     .map(memoryEntry)
     .join('');
 }
 
 if (page === 'story') {
-  renderMemories();
+  renderMemories(document.querySelector('#memory-year').value);
   document
     .querySelector('#memory-year')
     .addEventListener('change', (e) => renderMemories(e.target.value));
