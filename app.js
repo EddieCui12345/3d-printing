@@ -66,33 +66,23 @@ const celebrationPhotos = [
 ];
 const storeMoments = celebrationPhotos.slice(3, 6);
 
-// Add approved memories here as they become available. Keep dates and captions factual.
-const memories = [
-  {
-    year: '2026',
-    type: 'Stories',
-    title: '2026',
-    description:
-      '2026 project stories, event photos, and edited videos will be added as they are ready to share.',
-    comingSoon: true,
-  },
-  {
-    year: '2025',
-    type: 'Celebration',
-    title: '3D Toy Club Celebration',
-    description:
-      'On December 18, 2025, Richmond Central apprentices marked the year with certificates, shared cylindrical chess creations, and a fundraising moment for BC Children’s Hospital.',
-    url: '#gallery',
-    cover: 'assets/memory-2025-club.jpg',
-    photos: celebrationPhotos,
-  },
-];
+const galleryShot = (file, caption) => ({
+  src: `assets/gallery/${file}`,
+  alt: caption,
+  caption,
+});
 
-// Photos for the rotating gallery on the Stories & memories page, stored in assets/gallery/.
-const galleryPhotos = [
+// The 2026 folder in the shared Drive album. Near-duplicate frames of the same moment are kept once.
+const photos2026 = [
+  ['2026-03-05-8.jpg', 'An apprentice designs a blue shape on a laptop'],
+  ['2026-03-05-13.jpg', 'An apprentice arranges red shapes in a 3D design'],
+  ['2026-03-05-14.jpg', 'An apprentice designs a yellow shape on a laptop'],
   ['IMG_7347.jpg', 'An apprentice smiles beside a laptop in the classroom'],
   ['IMG_7354.jpg', 'Apprentices working on laptops at their desks'],
   ['IMG_7355.jpg', 'Two apprentices work together at a laptop'],
+  ['IMG_0974.jpg', 'Apprentices design 3D models on laptops by the classroom windows'],
+  ['IMG_0979.jpg', 'Apprentices work at their laptops along the window'],
+  ['IMG_0984.jpg', 'Apprentices design together in the classroom'],
   ['IMG_2653.jpg', 'An apprentice works on a design at a laptop'],
   ['IMG_2654.jpg', 'An apprentice at a classroom desk with a laptop'],
   ['IMG_2664.jpg', 'The Steamoji Richmond classroom during a session'],
@@ -102,9 +92,23 @@ const galleryPhotos = [
   ['IMG_2690.jpg', 'An apprentice and a mentor at a computer'],
   ['IMG_2692.jpg', 'Two apprentices look at a laptop together'],
   ['IMG_2694.jpg', 'Apprentices and a mentor in the classroom'],
-  ['IMG_2695.jpg', 'A mentor helps an apprentice at a laptop'],
   ['IMG_2696.jpg', 'A design project open on a laptop'],
   ['IMG_2831.jpg', 'An apprentice works at a laptop by the window'],
+  ['IMG_7600.jpg', 'Apprentices follow a pixelated figure design during class'],
+  ['IMG_7601.jpg', 'A mentor teaches a design while apprentices follow on their laptops'],
+  ['IMG_7608.jpg', 'Apprentices work on laptops across the classroom'],
+  ['IMG_7938.jpg', 'An apprentice designs a red flower model on a laptop'],
+  ['IMG_7941.jpg', 'An apprentice follows a flower design shown on the classroom screen'],
+  ['IMG_7943.jpg', 'An apprentice designs a red flower by the window'],
+  ['IMG_8679.jpg', 'Apprentices design at their laptops during an evening session'],
+  ['IMG_8680.jpg', 'An apprentice builds a red 3D model on a laptop'],
+  ['IMG_8681.jpg', 'An apprentice works on a 3D design at a laptop'],
+  ['IMG_8685.jpg', 'A mentor points out a design on the classroom screen'],
+  ['IMG_8690.jpg', 'An apprentice designs a red shape on a laptop'],
+].map(([file, caption]) => galleryShot(file, caption));
+
+// The 2025 folder. Videos stay in the shared album. Identical frames already shown once are not repeated.
+const photos2025 = [
   ['IMG_2834_1.jpg', 'An apprentice builds a design on a laptop'],
   [
     'IMG_4152.jpg',
@@ -126,18 +130,46 @@ const galleryPhotos = [
   ['P2800190.jpg', 'An apprentice in blue holds a certificate'],
   ['P2800195.jpg', 'An apprentice celebrates with a certificate and mentors'],
   ['P2800199.jpg', 'Mentors and staff at the December 2025 celebration'],
-  ['P2800201.jpg', 'Mentors and staff together at the celebration'],
-  ['P2800205.jpg', 'Mentors hold the fundraising cheque for BC Children’s Hospital'],
   ['P2800222.jpg', 'An apprentice holds a certificate with mentors'],
   ['P2800237.jpg', 'Apprentices and mentors gather with the fundraising cheque'],
-  ['P2800250.jpg', 'The whole club cheers with the fundraising cheque'],
-  ['P2800256.jpg', 'Apprentices share a laptop at the celebration'],
   ['P2800275.jpg', 'An apprentice holds a cylindrical chess set'],
   ['P2800278.jpg', 'An apprentice and family with a cylindrical chess set'],
   ['P2800288.jpg', 'Two apprentices and a parent with their chess sets'],
   ['P2800293.jpg', 'An apprentice and family hold colourful chess sets'],
   ['P2800317.jpg', 'A family in front of the Steamoji wall'],
+  ['P2800319.jpg', 'A family with two children poses in front of the Steamoji wall'],
+].map(([file, caption]) => galleryShot(file, caption));
+
+// Add approved memories here as they become available. Keep dates and captions factual.
+const memories = [
+  {
+    year: '2026',
+    type: 'Stories',
+    title: '2026',
+    description:
+      'Classroom photos from 2026. Project stories and edited videos will be added as they are ready to share.',
+    cover: 'assets/gallery/IMG_0984.jpg',
+    coverAlt: 'Apprentices design together in the classroom',
+    photos: photos2026,
+  },
+  {
+    year: '2025',
+    type: 'Celebration',
+    title: '3D Toy Club Celebration',
+    description:
+      'On December 18, 2025, Richmond Central apprentices marked the year with certificates, shared cylindrical chess creations, and a fundraising moment for BC Children’s Hospital.',
+    url: album,
+    cover: 'assets/memory-2025-club.jpg',
+    coverAlt: 'The December 2025 3D Toy Club Celebration at Richmond Central',
+    photos: photos2025.concat(celebrationPhotos),
+  },
 ];
+
+// Kept for the carousel markup. The Stories page shows the year photo grids instead.
+const galleryPhotos = [...photos2026, ...photos2025].map((photo) => [
+  photo.src.replace('assets/gallery/', ''),
+  photo.alt,
+]);
 
 const processSteps = [
   ['Imagine', 'Start with a question. What would be fun to play with?'],
@@ -229,14 +261,15 @@ function memoryEntry(m) {
         <p>${m.description}</p>
       </article>`;
   }
+  const action = m.url ? button(m.url, 'See every photo & video', true) : '';
   return `
     <article class="album-card">
-      <figure class="album-art"><img src="${m.cover}" alt="${m.title}"></figure>
+      <figure class="album-art"><img src="${m.cover}" alt="${m.coverAlt || m.title}"></figure>
       <div>
         <p class="eyebrow">COMMUNITY / ${m.type} / ${m.year}</p>
         <h2>${m.title}</h2>
         <p>${m.description}</p>
-        ${button(m.url, 'See every photo & video', true)}
+        ${action}
       </div>
     </article>
     ${m.photos ? photoGrid(m.photos) : ''}`;
@@ -456,7 +489,7 @@ const pages = {
       <div>
         <p class="eyebrow">MORE THAN THE THINGS WE MAKE</p>
         <h2>The memories we make together.</h2>
-        <p>Certificates, shared creations, and a fundraising moment from December 18, 2025. 2026 project stories, event photos, and edited videos will be added as they are ready to share.</p>
+        <p>Certificates, shared creations, and a fundraising moment from December 18, 2025. 2026 classroom photos are in the scrapbook. Project stories and edited videos will be added as they are ready to share.</p>
       </div>
       <a class="text-link" href="story.html">Open the scrapbook ${arrow}</a>
     </section>
@@ -562,7 +595,6 @@ const pages = {
         </select>
       </div>
       <div id="memories"></div>
-      ${gallery}
       <div class="link-grid">
         <a href="designers.html">
           <span>01 / THE PEOPLE</span>
@@ -591,7 +623,7 @@ const pages = {
     )}
     <section class="wrap bottom-space">
       <div class="steps">${stepCards}</div>
-      <aside class="notice">2026 project stories, event photos, and edited videos will be added as they are ready to share.</aside>
+      <aside class="notice">2026 project stories and edited videos will be added as they are ready to share.</aside>
     </section>
     ${cta}`,
 

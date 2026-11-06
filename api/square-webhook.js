@@ -50,7 +50,9 @@ module.exports = async (req, res) => {
     return res.status(200).json({ ok: true });
   }
   const result = await notifyPaidOrder(payment.order_id, { hintNote: payment.note || '' });
-  if (result.body.pending) return res.status(503).json(result.body);
+  if (result.body.pending || result.body.sheet === 'failed') {
+    return res.status(503).json(result.body);
+  }
   return res.status(result.http).json(result.body);
 };
 

@@ -21,6 +21,8 @@ The cart is saved in the visitor's browser. Before payment, a parent chooses a R
 
 Those emails are sent through the Steamoji North Gmail. Add `email` and `emailAppPassword` from `.env.example` in Vercel. That same address sends both messages and receives the club’s copy. The app password comes from the Google account’s security settings. Until those are set, checkout still works and the pickup details remain on the Square payment, but the confirmation emails are not sent. A Square `payment.updated` webhook (`api/square-webhook.js`) sends the same emails if the buyer does not return to the thank-you page. Subscribe to that event in the Square dashboard and set `SQUARE_WEBHOOK_SIGNATURE_KEY` and `SQUARE_WEBHOOK_URL`.
 
+A paid order is also added to an Orders tab in the Google Sheet for the pickup location. The row lists the date, order, products, total, parent, and location. The Taken column starts as "Not taken". Change that cell to "Taken" when the family collects the toys. Share each spreadsheet with the service account email as an Editor, then set `GOOGLE_SERVICE_ACCOUNT_EMAIL`, `GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY`, `SHEET_RICHMOND_CENTRAL`, and `SHEET_RICHMOND_NORTH`. Until those are set, checkout and the emails still work and the sheets stay unchanged.
+
 1. In the [Square Developer Dashboard](https://developer.squareup.com/apps), create an application and copy its access token and location ID. Start with the sandbox values to test with fake cards.
 2. In Vercel, open Project Settings > Environment Variables and add the variables listed in `.env.example`.
 3. Redeploy. Switch `SQUARE_ENVIRONMENT` to `production` and use production credentials when ready to take real payments.
@@ -28,10 +30,10 @@ Those emails are sent through the Steamoji North Gmail. Add `email` and `emailAp
 Checkout works on Vercel and with `npm run dev`. A plain static server (such as `python -m http.server`) shows the cart but cannot run `/api/checkout`, so checkout reports it is unavailable.
 - Add approved community entries to `memories` with `year`, `type`, `title`, `description`, `url`, `cover`, and optional `photos`. The year filter updates automatically.
 - Store new approved images in `assets/`. Use factual captions and accessible image descriptions. Keep original media backups.
-- The rotating gallery on the Stories & memories page shows every photo listed in `galleryPhotos` in `app.js`. To add one, put the photo in `assets/gallery/` (about 1400px on the long side keeps pages fast) and add its file name and a short description to the list.
+- Stories & memories shows each year from its own list in `app.js`: `photos2026` and `photos2025`. To add a photo, put it in `assets/gallery/` (about 1400px on the long side keeps pages fast) and add its file name and a short description to that year’s list. Photos in the shared Google Drive folder are not loaded by the website. A new file there appears on the site only after it is copied into `assets/gallery/` and listed for its year. Large videos stay in the linked album.
 - Dedicated pages cover creations, memories, designers, process, impact, events, about, joining, and contact. `index.html` and `home.html` both show the homepage.
 - Selected photos from the December 18, 2025 Richmond Central celebration are stored in `assets/` and shown on the creations and memories pages. The full album, including videos, remains linked. Prices, availability, fundraising totals, apprentice profiles, and edited videos still await confirmed content.
 
-The contact form prepares a draft in the visitor’s email application. It does not send or store submissions. There is no inventory tracking, CMS, or automatic album synchronization. Future years and entries are added by editing the data in `app.js`.
+The contact form prepares a draft in the visitor’s email application. It does not send or store submissions. Paid orders are appended to the pickup location’s Google Sheet. There is no CMS or automatic album synchronization. Future years and entries are added by editing the data in `app.js`.
 
 Google Fonts is optional; fallback fonts work offline. Reduced-motion preferences are respected. The site is intended for Vercel: static pages are served as-is and `api/` holds checkout and the pickup emails.

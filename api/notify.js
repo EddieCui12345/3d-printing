@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const { squareFetch } = require('./square.js');
 const { parseNote, verifyPickupToken } = require('./buyer.js');
 const { mailConfigured, gmailUser, sendMail } = require('./mail.js');
+const { sheetsConfigured, appendPaidOrder } = require('./sheets.js');
 
 const money = (cents) =>
   new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD' }).format(
@@ -107,8 +108,9 @@ async function completedPayment(order) {
   return data.payment?.status === 'COMPLETED' ? data.payment : null;
 }
 
-// Sparse update: only the notice flag. Line items are left untouched.
-async function setNotice(order, notice) {
+// Sparse update. Line items are left untouched. Metadata is sent in full because
+// Square replaces the whole map when it is included.
+async function setMeta(order, patch) {
   const res = await squareFetch(`/v2/orders/${order.id}`, {
     method: 'PUT',
     body: JSON.stringify({
@@ -116,7 +118,7 @@ async function setNotice(order, notice) {
       order: {
         location_id: order.location_id,
         version: order.version,
-        metadata: { notice },
+        metadata: { ...(order.metadata || {}), ...patch },
       },
     }),
   });
@@ -126,6 +128,10 @@ async function setNotice(order, notice) {
     return null;
   }
   return data.order;
+}
+
+async function setNotice(order, notice) {
+  return setMeta(order, { notice });
 }
 
 function noticeAge(order) {
@@ -178,7 +184,9 @@ async function notifyPaidOrder(orderId, { token = '', hintNote = '' } = {}) {
   }
   const order = await getOrder(orderId);
   if (!order) return { http: 404, body: { error: 'We could not find that order.' } };
-  if (order.metadata?.notice === 'sent') return { http: 200, body: { sent: true, already: true } };
+  const emailDone = order.metadata?.notice === 'sent';
+  const sheetDone = order.metadata?.sheet === 'logged' || !sheetsConfigured();
+  if (emailDone && sheetDone) return { http: 200, body: { sent: true, already: true } };
   if (order.state === 'CANCELED') {
     return { http: 200, body: { error: 'This payment was not completed.' } };
   }
@@ -198,25 +206,62 @@ async function notifyPaidOrder(orderId, { token = '', hintNote = '' } = {}) {
       body: { error: 'We could not read the pickup details for this order yet.' },
     };
   }
-  if (!orderLines(order).length) return { http: 502, body: { error: MAIL_FAILED } };
-  if (!mailConfigured()) return { http: 503, body: { error: NOT_SETUP } };
+  const lines = orderLines(order);
+  if (!lines.length) return { http: 502, body: { error: MAIL_FAILED } };
 
-  const claimed = await claim(order);
-  if (claimed.state === 'sent') return { http: 200, body: { sent: true, already: true } };
-  if (claimed.state === 'busy') return { http: 200, body: { pending: true } };
-
-  try {
-    // Use the order fetched before the notice flag was written, so the email lists those lines.
-    await deliver(order, buyer);
-  } catch (err) {
-    console.error('Pickup email failed', order.id, err.code || err.message);
-    await setNotice(claimed.order, 'retry');
-    if (err.code === 'email_not_configured') return { http: 503, body: { error: NOT_SETUP } };
-    return { http: 502, body: { error: MAIL_FAILED } };
+  let working = order;
+  let emailHttp = null;
+  let emailBody = null;
+  if (!emailDone) {
+    if (!mailConfigured()) {
+      emailHttp = 503;
+      emailBody = { error: NOT_SETUP };
+    } else {
+      const claimed = await claim(order);
+      if (claimed.state === 'busy') return { http: 200, body: { pending: true } };
+      if (claimed.state !== 'sent') {
+        try {
+          // Email the order fetched before the notice flag, so the message keeps its lines.
+          await deliver(order, buyer);
+          working = (await setNotice(claimed.order, 'sent')) || claimed.order;
+        } catch (err) {
+          console.error('Pickup email failed', order.id, err.code || err.message);
+          await setNotice(claimed.order, 'retry');
+          emailHttp = err.code === 'email_not_configured' ? 503 : 502;
+          emailBody = { error: err.code === 'email_not_configured' ? NOT_SETUP : MAIL_FAILED };
+          working = claimed.order;
+        }
+      } else {
+        working = claimed.order;
+      }
+    }
   }
 
-  await setNotice(claimed.order, 'sent');
-  return { http: 200, body: { sent: true } };
+  let sheet = working.metadata?.sheet === 'logged' ? 'logged' : 'skipped';
+  if (sheetsConfigured() && sheet !== 'logged') {
+    try {
+      const total = order.total_money?.amount ?? lines.reduce((sum, line) => sum + line.amount, 0);
+      const recorded = await appendPaidOrder({
+        orderId: order.id,
+        lines,
+        totalCents: total,
+        buyer,
+      });
+      const marked = await setMeta(working, { sheet: 'logged' });
+      if (!marked) {
+        console.error('Order was added to the sheet but the logged flag was not saved', order.id);
+        sheet = 'failed';
+      } else {
+        sheet = recorded === 'already' ? 'logged' : recorded;
+      }
+    } catch (err) {
+      console.error('Order sheet update failed', order.id, err.message);
+      sheet = err.code === 'sheet_not_configured' ? 'missing' : 'failed';
+    }
+  }
+
+  if (emailBody) return { http: emailHttp, body: { ...emailBody, sheet } };
+  return { http: 200, body: { sent: true, already: emailDone, sheet } };
 }
 
 module.exports = { notifyPaidOrder, orderLines, sameItems, productBlocks };

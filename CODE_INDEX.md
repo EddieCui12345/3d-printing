@@ -16,6 +16,7 @@ Use this map to find the code you want to edit. Search for the named function or
 | `api/notify.js` | Reads the paid Square order and sends both emails | `notifyPaidOrder` |
 | `api/buyer.js` | Validates parent details and the pickup note | `readBuyer`, `buildNote`, `parseNote` |
 | `api/mail.js` | Gmail delivery of the pickup emails | `sendMail` |
+| `api/sheets.js` | Adds a paid order to the pickup location’s Google Sheet | `appendPaidOrder`, `orderRow` |
 | `api/square.js` | Shared Square API client | `squareFetch` |
 | `.env.example` | Checkout, email, and webhook configuration | Environment variable names |
 | `.prettierrc` | Formatting preferences | Two-space indentation by default; single quotes; 100-column target |
