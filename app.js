@@ -94,7 +94,7 @@ const photos2026 = [
   ['IMG_2694.jpg', 'Apprentices and a mentor in the classroom'],
   ['IMG_2696.jpg', 'A design project open on a laptop'],
   ['IMG_2831.jpg', 'An apprentice works at a laptop by the window'],
-  ['IMG_7600.jpg', 'Apprentices follow a pixelated figure design during class'],
+  ['IMG_7600.jpg?v=20261106', 'Apprentices follow a pixelated figure design during class'],
   ['IMG_7601.jpg', 'A mentor teaches a design while apprentices follow on their laptops'],
   ['IMG_7608.jpg', 'Apprentices work on laptops across the classroom'],
   ['IMG_7938.jpg', 'An apprentice designs a red flower model on a laptop'],
