@@ -2,7 +2,7 @@
 /* ---------- Page setup ---------- */
 
 const page = document.body.dataset.page || 'home';
-const album = 'https://photos.google.com/album/AF1QipN9PMF0VWL04srBHGjbW76XHLC35qaRUzWv_2zg';
+const album = 'https://photos.google.com/share/AF1QipO24Is1qI88PgLIZ-4mfORHLOF8MI3YirNiCxCHPenMzn4BT52GyIYeQ4bgq-F0dw?key=X2NTSndJLW1pWlJIMjNOQ0VRQjNFRXpFWnBxOFhR';
 const nav = [
   ['home', 'Home'],
   ['products', 'Our creations'],
