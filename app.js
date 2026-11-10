@@ -2,7 +2,7 @@
 /* ---------- Page setup ---------- */
 
 const page = document.body.dataset.page || 'home';
-const album = 'https://drive.google.com/drive/folders/1cWi6zjlDhct2nD24zksTO62Whvq1V_MS';
+const album = 'https://photos.google.com/album/AF1QipN9PMF0VWL04srBHGjbW76XHLC35qaRUzWv_2zg';
 const nav = [
   ['home', 'Home'],
   ['products', 'Our creations'],
