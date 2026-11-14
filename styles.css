@@ -1702,7 +1702,7 @@ dialog > img {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1.5rem;
-  max-width: 780px; /* Keeps both letters compact so they fit side-by-side */
+  max-width: 860px;
   margin: 2rem auto 0;
 }
 
