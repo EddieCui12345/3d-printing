@@ -499,7 +499,7 @@ const pages = {
         <div class="mayor-copy">
           <p class="eyebrow">A MESSAGE FROM THE CITY OF RICHMOND</p>
           <h2>Greetings from the Mayor</h2>
-          <p>Mayor Malcolm D. Brodie’s messages of support for the club’s fundraisers.</p>
+          <p>The mayor of Richmond's messages of support for the club’s fundraisers.</p>
         </div>
         <div class="mayor-grid">
           <figure class="mayor-item">
