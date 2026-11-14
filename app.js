@@ -498,12 +498,23 @@ const pages = {
       <div class="wrap">
         <div class="mayor-copy">
           <p class="eyebrow">A MESSAGE FROM THE CITY OF RICHMOND</p>
-          <h2>A greeting from the Mayor</h2>
-          <p>Mayor Malcolm D. Brodie’s message of support for the club’s fundraiser.</p>
+          <h2>Greetings from the Mayor</h2>
+          <p>Mayor Malcolm D. Brodie’s messages of support for the club’s fundraisers.</p>
         </div>
-        <a class="mayor-sheet" href="assets/mayor%20greeting.jpg" target="_blank" rel="noopener noreferrer">
-          <img src="assets/mayor%20greeting.jpg" alt="Letter from Mayor Malcolm D. Brodie welcoming guests to the Steamoji 3D Toy Design Fundraiser">
-        </a>
+        <div class="mayor-grid">
+          <figure class="mayor-item">
+            <a class="mayor-sheet" href="assets/mayor%20greeting.jpg" target="_blank" rel="noopener noreferrer">
+              <img src="assets/mayor%20greeting.jpg" alt="2025 Letter from Mayor Malcolm D. Brodie welcoming guests to the Steamoji 3D Toy Design Fundraiser">
+            </a>
+            <figcaption>2025 Mayor’s Letter</figcaption>
+          </figure>
+          <figure class="mayor-item">
+            <a class="mayor-sheet" href="assets/mayor%20greeting%202.jpg" target="_blank" rel="noopener noreferrer">
+              <img src="assets/mayor%20greeting%202.jpg" alt="2026 Letter from Mayor Malcolm D. Brodie supporting the Steamoji 3D Toy Design Club">
+            </a>
+            <figcaption>2026 Mayor’s Letter</figcaption>
+          </figure>
+        </div>
       </div>
     </section>
     ${cta}`,

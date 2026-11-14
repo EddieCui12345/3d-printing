@@ -1698,3 +1698,32 @@ dialog > img {
     margin-bottom: 25px;
   }
 }
+.mayor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  max-width: 780px; /* Keeps both letters compact so they fit side-by-side */
+  margin: 2rem auto 0;
+}
+
+.mayor-item {
+  margin: 0;
+  text-align: center;
+}
+
+.mayor-item .mayor-sheet {
+  display: block;
+  max-width: 100%;
+}
+
+.mayor-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.mayor-item figcaption {
+  margin-top: 0.75rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
